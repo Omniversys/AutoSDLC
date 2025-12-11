@@ -1,0 +1,169 @@
+# Learned User Preferences (Procedural Knowledge)
+# "How this user likes things done" - specific to this project
+
+code_style:
+  general:
+    - "Descriptive variable/function names (no abbreviations unless standard)"
+    - "Comments explain 'why', not 'what'"
+    - "Keep functions/methods focused and small"
+    - "Prefer composition over inheritance"
+    - "Error messages should be actionable"
+  
+  language_specific:
+    python:
+      - "Use type hints on all functions"
+      - "Prefer f-strings over .format() or %"
+      - "Use dataclasses for simple data structures"
+      - "async/await for I/O-bound operations"
+      - "Follow PEP 8 style guide"
+      - "Use list comprehensions when readable"
+    
+    javascript:
+      - "Use const by default, let when needed, never var"
+      - "Prefer arrow functions for callbacks"
+      - "Use destructuring for objects/arrays"
+      - "Async/await over promise chains"
+      - "Template literals for string interpolation"
+  
+  documentation:
+    - "Docstrings on all public functions/classes"
+    - "Include usage examples in docstrings for complex functions"
+    - "README updated when APIs or architecture changes"
+    - "Comment complex logic and business rules"
+    - "Don't comment obvious code"
+    - "Keep API documentation up-to-date"
+  
+  testing:
+    approach: "TDD - Test-Driven Development preferred"
+    requirements:
+      - "Write tests BEFORE implementation when possible"
+      - "Minimum 80% code coverage"
+      - "Test error cases, not just happy paths"
+      - "Use descriptive test names"
+      - "Integration tests for API endpoints"
+      - "Tests should be fast and independent"
+    
+    structure:
+      - "Arrange-Act-Assert pattern"
+      - "One test per behavior/scenario"
+      - "Mock external dependencies"
+      - "Clean up test data after tests"
+
+communication:
+  updates:
+    style: "Brief and concise"
+    format: "What's done, what's next, any blockers"
+    frequency: "At task boundaries or when blocked"
+    detail_level: "High-level unless user asks for details"
+  
+  questions:
+    - "Ask clarifying questions early, don't assume"
+    - "Present options when multiple approaches viable"
+    - "Explain tradeoffs when recommending solutions"
+    - "Don't ask permission for standard procedures"
+  
+  decision_making:
+    user_decides:
+      - "Architecture and tech stack choices"
+      - "Feature scope and priorities"
+      - "Business logic and rules"
+      - "External integrations"
+      - "Security tradeoffs"
+    
+    agents_decide:
+      - "Implementation details"
+      - "Variable and function names"
+      - "File organization and structure"
+      - "Internal refactoring"
+      - "Test strategies (within coverage requirements)"
+  
+  escalations:
+    when_to_escalate:
+      - "Security concerns (immediately)"
+      - "Timeline impacts (when discovered)"
+      - "Scope changes (before implementing)"
+      - "Technical blockers (after attempting solutions)"
+      - "Architecture changes needed (before proceeding)"
+    
+    how_to_escalate:
+      - "Clear problem statement"
+      - "What was attempted"
+      - "Proposed solutions with tradeoffs"
+      - "Timeline impact"
+      - "Wait for user decision before proceeding"
+
+work_patterns:
+  pacing:
+    philosophy: "Quality over speed"
+    practices:
+      - "Better to take extra time for thorough testing"
+      - "Refactor when code smells detected"
+      - "Don't rush through peer reviews"
+      - "Address technical debt proactively"
+  
+  autonomy:
+    design_phase:
+      - "Present options, user decides"
+      - "Collaborate on architecture"
+      - "Explain tradeoffs clearly"
+      - "Wait for approval before implementing"
+    
+    execution_phase:
+      - "Work independently on assigned tasks"
+      - "Update state files without prompting"
+      - "Only stop for: blockers, architecture changes, security issues"
+      - "Request peer reviews when checklist says to"
+      - "Self-organize within approved architecture"
+  
+  quality:
+    non_negotiables:
+      - "All tests must pass before peer review"
+      - "No TODOs or placeholder code in production"
+      - "Security reviews for auth/payment code"
+      - "Performance testing for critical paths"
+    
+    best_practices:
+      - "Peer review required for all code"
+      - "Manual QA for user-facing features"
+      - "Integration tests for API changes"
+      - "Documentation updated with code"
+
+collaboration:
+  peer_review:
+    expectations:
+      - "Thorough reviews, not rubber stamps"
+      - "Specific, actionable feedback"
+      - "Security and edge cases considered"
+      - "Respectful and constructive comments"
+  
+  cross_team:
+    - "Frontend/Backend: Agree on API contracts early"
+    - "Dev/QA: Discuss test scenarios during implementation"
+    - "Dev/Architect: Consult on complex implementations"
+    - "All/PM: Communicate blockers promptly"
+
+tools_and_workflows:
+  version_control:
+    - "Meaningful commit messages"
+    - "One logical change per commit"
+    - "Branch per feature/fix"
+    - "Squash commits before merge if messy history"
+  
+  ci_cd:
+    - "All tests must pass in CI"
+    - "No merge without passing CI"
+    - "Deploy to staging before production"
+    - "Monitor deployments actively"
+
+preferences_discovered_through:
+  - "Direct feedback during code reviews"
+  - "Patterns in approval/rejection decisions"
+  - "Questions user asks repeatedly"
+  - "Corrections to agent approaches"
+  - "Praise for specific practices"
+
+---
+# This captures "the way this user likes to work"
+# Different from project facts (semantic) or past events (episodic)
+# Update when new preferences discovered through user feedback
+# Last Updated: {LAST_UPDATE_DATE}

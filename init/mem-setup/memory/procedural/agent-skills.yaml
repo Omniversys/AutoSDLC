@@ -1,0 +1,299 @@
+# Procedural Memory - Learned Agent Skills & Behaviors
+# How agents do their work based on learned patterns
+
+agents:
+  backend_developer:
+    learned_procedures:
+      
+      api_endpoint_creation:
+        description: "Standard procedure for creating new API endpoints"
+        learned_from: "Multiple endpoint implementations"
+        procedure:
+          - "Define request/response models (with type hints)"
+          - "Add route to appropriate router"
+          - "Implement async handler function"
+          - "Add authentication/authorization if required"
+          - "Add input validation and error handling"
+          - "Write comprehensive test cases (3-5 minimum)"
+          - "Update API documentation"
+          - "Test manually before peer review"
+        
+        quality_checklist:
+          - "Type hints on all parameters and return values"
+          - "Docstring with description and example"
+          - "Error handling for edge cases"
+          - "Logging for debugging"
+          - "Tests cover happy path and error cases"
+      
+      test_writing_workflow:
+        description: "How to write effective tests"
+        learned_from: "Writing tests across project"
+        procedure:
+          - "Write descriptive test name (test_feature_scenario_expected)"
+          - "Arrange: Set up test data and preconditions"
+          - "Act: Call the function/endpoint under test"
+          - "Assert: Verify expected outcomes"
+          - "Clean up: Remove test data if needed"
+          - "Run test to verify it passes"
+          - "Check coverage report"
+        
+        best_practices:
+          - "One assertion concept per test (can have multiple assert statements)"
+          - "Test both success and failure paths"
+          - "Use descriptive assertion messages"
+          - "Keep tests independent (no shared state)"
+      
+      code_review_response:
+        description: "How to respond to peer review feedback"
+        learned_from: "Code review interactions"
+        procedure:
+          - "Read all feedback completely before responding"
+          - "Acknowledge valid points first"
+          - "Ask clarifying questions if confused"
+          - "Fix issues in priority order: security > bugs > style"
+          - "Update tests if logic changed"
+          - "Reply to each comment when addressed"
+          - "Request re-review if significant changes made"
+
+  frontend_developer:
+    learned_procedures:
+      
+      component_creation:
+        description: "Standard procedure for creating UI components"
+        learned_from: "Component development patterns"
+        procedure:
+          - "Design component API (props, events, slots)"
+          - "Implement component logic"
+          - "Add styling (follow design system)"
+          - "Add prop validation/type checking"
+          - "Write component tests"
+          - "Add to component library/docs"
+          - "Test in multiple browsers if applicable"
+        
+        quality_checklist:
+          - "Accessibility considerations (ARIA, keyboard nav)"
+          - "Responsive design verified"
+          - "Props properly typed"
+          - "Loading/error states handled"
+
+  solution_architect:
+    learned_procedures:
+      
+      present_options_workflow:
+        description: "How to present technical options to user"
+        learned_from: "Architecture decision presentations"
+        procedure:
+          - "Research 2-3 viable options thoroughly"
+          - "Create comparison table (pros/cons/tradeoffs)"
+          - "Add personal recommendation with clear rationale"
+          - "Explain long-term implications"
+          - "Anticipate user questions and prepare answers"
+          - "Provide learning resources for each option"
+        
+        presentation_format: |
+          ## Option A: [Technology/Approach]
+          **Pros:** [Specific advantages]
+          **Cons:** [Specific disadvantages]
+          **Best for:** [Use case fit]
+          **Tradeoffs:** [What you gain vs what you sacrifice]
+          
+          ## Option B: [Technology/Approach]
+          [Same structure]
+          
+          ## My Recommendation: Option [X]
+          **Why:** [Clear reasoning based on project requirements]
+          **Risks:** [Honest assessment of potential issues]
+          **Mitigation:** [How to address the risks]
+
+  qa_automation:
+    learned_procedures:
+      
+      test_failure_investigation:
+        description: "How to debug failing tests effectively"
+        learned_from: "Test failure debugging sessions"
+        procedure:
+          - "Read error message and stack trace carefully"
+          - "Determine if it's a test issue or code issue"
+          - "Run the failing test in isolation"
+          - "Add debug logging if needed"
+          - "Check recent code changes that might affect test"
+          - "Verify test data setup and preconditions"
+          - "Check for environment/dependency issues"
+          - "Document findings and fix"
+        
+        escalation_criteria:
+          - "If code bug discovered → Notify appropriate developer"
+          - "If environment issue → Notify DevOps"
+          - "If flaky test → Document and track pattern"
+          - "If design flaw discovered → Notify Architect"
+
+  qa_manual:
+    learned_procedures:
+      
+      user_flow_testing:
+        description: "How to test complete user flows"
+        learned_from: "User acceptance testing"
+        procedure:
+          - "Review acceptance criteria and user stories"
+          - "Create test scenarios for happy paths"
+          - "Create test scenarios for edge cases"
+          - "Create test scenarios for error conditions"
+          - "Execute tests systematically"
+          - "Document any UX issues or confusion"
+          - "Verify cross-browser/device if applicable"
+          - "Report findings clearly with reproduction steps"
+
+  devops:
+    learned_procedures:
+      
+      deployment_workflow:
+        description: "Standard deployment procedure"
+        learned_from: "Deployment operations"
+        procedure:
+          - "Verify all tests pass in CI"
+          - "Review deployment checklist"
+          - "Backup current production state"
+          - "Deploy to staging first"
+          - "Run smoke tests on staging"
+          - "Get approval for production deployment"
+          - "Deploy to production"
+          - "Monitor logs and metrics"
+          - "Verify deployment success"
+          - "Document any issues"
+        
+        rollback_criteria:
+          - "Critical functionality broken"
+          - "Performance degradation > 20%"
+          - "Error rate spike"
+          - "Security vulnerability introduced"
+
+  pm:
+    learned_procedures:
+      
+      gate_presentation:
+        description: "How to present gate deliverables to user"
+        learned_from: "Gate presentations"
+        procedure:
+          - "Verify all gate requirements complete"
+          - "Summarize what was accomplished"
+          - "Highlight key deliverables"
+          - "Explain what decision/approval is needed"
+          - "Present clearly without overwhelming detail"
+          - "Answer questions thoroughly"
+          - "Document approval or feedback"
+          - "Update status and plan next steps"
+      
+      blocker_escalation:
+        description: "How to escalate blockers effectively"
+        learned_from: "Blocker management"
+        procedure:
+          - "Ensure agent tried to resolve (30 min minimum)"
+          - "Gather all relevant context"
+          - "Document what was attempted"
+          - "Identify 2-3 potential solutions"
+          - "Assess timeline impact"
+          - "Present to user clearly and concisely"
+          - "Track resolution and learn from it"
+
+# Cross-Agent Collaboration Patterns
+
+collaboration_procedures:
+  
+  peer_code_review:
+    description: "How peer review works between agents"
+    participants: ["Any developer", "Different developer"]
+    learned_from: "Code review sessions"
+    
+    reviewer_steps:
+      - "Read PR description and acceptance criteria"
+      - "Verify tests run and pass"
+      - "Review code for correctness, style, security"
+      - "Check for: no TODOs, proper error handling, clear naming"
+      - "Leave specific, actionable comments"
+      - "Approve if all checks pass, request changes if issues found"
+    
+    reviewee_steps:
+      - "Address all comments (or explain why not)"
+      - "Push fixes to same PR"
+      - "Reply to comments when resolved"
+      - "Request re-review if significant changes"
+      - "Thank reviewer for feedback"
+    
+    quality_criteria:
+      - "No placeholder code or TODOs"
+      - "All functions have clear documentation"
+      - "Tests cover happy path and error cases"
+      - "Code follows project style guide"
+      - "No obvious security vulnerabilities"
+  
+  architecture_collaboration:
+    description: "How developers work with architect"
+    participants: ["Developer", "Solution Architect"]
+    
+    when_to_consult:
+      - "Before implementing complex features"
+      - "When discovering design constraints"
+      - "When considering tech stack changes"
+      - "When performance issues arise"
+    
+    collaboration_pattern:
+      - "Developer describes implementation challenge"
+      - "Architect reviews context and constraints"
+      - "Together explore 2-3 approaches"
+      - "Architect provides recommendation"
+      - "Developer implements with architect available for questions"
+
+# Workflow Patterns
+
+workflow_patterns:
+  
+  task_completion_ritual:
+    description: "Standard procedure when completing any task"
+    learned_from: "Task completions across project"
+    steps:
+      - "Verify all acceptance criteria met"
+      - "Run full test suite (must pass)"
+      - "Update task status document"
+      - "Request peer review if required by workflow"
+      - "Update episodic memory with learnings"
+      - "Update action-plan.md to next task"
+      - "Update copilot-state.md with new context"
+      - "Notify PM if task represents milestone"
+  
+  gate_transition:
+    description: "How to transition between gates"
+    learned_from: "Gate transitions"
+    steps:
+      - "Verify all gate deliverables complete"
+      - "Run quality checks for gate"
+      - "Generate gate summary document"
+      - "Update semantic memory with any decisions made"
+      - "Notify PM that gate is ready for user review"
+      - "PM presents to user"
+      - "User approves or provides feedback"
+      - "If approved: Update status, load next gate config"
+      - "If rejected: Address feedback, iterate, re-submit"
+  
+  session_start_ritual:
+    description: "What to do at start of each session"
+    steps:
+      - "Read .AutoSDLC/copilot-state.md (where am I?)"
+      - "Read .AutoSDLC/memory/semantic/knowledge-base.md (what are the facts?)"
+      - "Read .AutoSDLC/memory/episodic/{my-agent-id}.md (what's my history?)"
+      - "Read .AutoSDLC/action-plan.md (what should I do next?)"
+      - "Greet user with context of where we left off"
+      - "Proceed with work or await instructions"
+  
+  session_end_ritual:
+    description: "What to do at end of each session"
+    steps:
+      - "Update episodic memory with session learnings"
+      - "Update copilot-state.md with current context"
+      - "Update action-plan.md with next steps"
+      - "Commit any code changes"
+      - "Leave clear handoff notes for next session"
+
+---
+# This file grows and evolves as agents learn better ways of working
+# Update when discovering new effective patterns or procedures
+# Last Updated: {LAST_UPDATE_DATE}

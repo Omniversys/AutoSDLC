@@ -1,0 +1,59 @@
+name: Validate Files
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install yamllint
+        run: |
+          pip install yamllint
+
+      - name: Validate YAML files
+        run: |
+          echo "Validating YAML files..."
+          find . -type f \( -name "*.yml" -o -name "*.yaml" \) -not -path "./.git/*" -print0 | while IFS= read -r -d '' file; do
+            echo "Validating: $file"
+            yamllint -d "{extends: default, rules: {line-length: {max: 120}, document-start: disable, truthy: {check-keys: false}}}" "$file"
+          done
+
+      - name: Install markdownlint-cli
+        run: |
+          npm install -g markdownlint-cli
+
+      - name: Check Markdown formatting
+        run: |
+          echo "Checking Markdown files..."
+          markdownlint '**/*.md' --ignore node_modules --ignore .git || {
+            echo "Markdown formatting issues found. Please fix the above errors."
+            exit 1
+          }
+
+      - name: Validation Summary
+        if: success()
+        run: |
+          echo "All validation checks passed successfully!"
+
+      - name: Validation Failed
+        if: failure()
+        run: |
+          echo "Validation failed. Please fix the errors above."
+          exit 1

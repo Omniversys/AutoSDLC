@@ -1,0 +1,380 @@
+# Agile Two-Phase Workflow
+# Phase 1: Collaborative Design (Client in control)
+# Phase 2: Autonomous Execution (Agents in control)
+
+workflow_name: "agile-two-phase"
+version: "1.0"
+
+# Documentation Configuration
+documentation:
+  mode: "comprehensive"
+
+  templates:
+    directory: "templates/comprehensive/"
+    load_all: true
+
+  session_context:
+    format: "comprehensive"
+    template: "templates/session-context/comprehensive.template.md"
+    update_frequency: "action"
+    max_words: unlimited
+
+  directory_structure:
+    create:
+      - ".AutoSDLC/"
+      - ".AutoSDLC/quality-reports/"
+      - "docs/epics/"
+      - "docs/stories/"
+      - "docs/tasks/"
+      - "architecture/decisions/"
+      - "architecture/proposals/"
+
+  quality_reports:
+    type: "full"
+    location: ".AutoSDLC/quality-reports/"
+
+phases:
+  design:
+    name: "Collaborative Design"
+    description: "Client makes all key decisions with agent support"
+    autonomy_level: 40  # Agents propose, client decides
+
+    active_agents:
+      - project_manager
+      - product_owner
+      - solution_architect
+
+    gates:
+      gate_1:
+        name: "PSA Approval"
+        owner: "product_owner"
+        deliverables:
+          - "docs/PSA.md"
+        approval_required: true
+        client_action: "Review and approve PSA with all epics"
+
+        success_criteria:
+          - "All epics identified and described"
+          - "High-level scope defined"
+          - "Client approval received"
+
+        next_gate: "gate_2"
+
+      gate_2:
+        name: "Epics & Stories Approval"
+        owner: "product_owner"
+        deliverables:
+          - "docs/epics/*.md"
+          - "docs/stories/*.md"
+        approval_required: true
+        client_action: "Review and approve detailed user stories"
+
+        success_criteria:
+          - "All user stories created with acceptance criteria"
+          - "Story estimates provided"
+          - "Dependencies identified"
+          - "Client approval received"
+
+        next_gate: "gate_3"
+
+      gate_3:
+        name: "Architecture Approval"
+        owner: "solution_architect"
+        deliverables:
+          - "architecture/proposal.md"
+          - "architecture/approved-architecture.md"
+        approval_required: true
+        client_action: "Choose from architecture options and approve final architecture"
+
+        critical: true
+        locks_after_approval:
+          - "architecture/approved-architecture.md"
+          - "architecture/tech-stack.yaml"
+
+        architect_responsibilities:
+          - "Present 2-3 options for each major technical decision"
+          - "Provide pros/cons comparison matrix"
+          - "Document client's chosen options"
+          - "Create detailed architecture from client decisions"
+
+        success_criteria:
+          - "All technical options presented (backend, frontend, database, etc.)"
+          - "Client makes all technical decisions"
+          - "Architecture fully documented"
+          - "Tech stack locked"
+          - "Client says 'Architecture approved'"
+
+        next_gate: "gate_4"
+
+      gate_4:
+        name: "Sprint Planning"
+        owner: "project_manager"
+        deliverables:
+          - "status/sprint-plan.md"
+          - "docs/tasks/*.md"
+        approval_required: true
+        client_action: "Review and approve sprint plan and task assignments"
+
+        success_criteria:
+          - "Stories broken down into tasks"
+          - "Tasks assigned to agents"
+          - "Sprint timeline defined"
+          - "Client approval received"
+
+        next_phase: "execution"
+
+    phase_completion:
+      trigger: "Client says 'Begin Execution' or 'Architecture approved, begin execution'"
+      validation:
+        - "All 4 gates completed"
+        - "Architecture locked"
+        - "Sprint plan approved"
+
+  execution:
+    name: "Autonomous Execution"
+    description: "Agents build autonomously per approved architecture"
+    autonomy_level: 90  # Agents decide implementation details
+
+    active_agents:
+      - project_manager
+      - product_owner
+      - solution_architect
+      - backend_developer
+      - frontend_developer
+      - ml_engineer
+      - devops_engineer
+      - qa_automation
+      - qa_manual
+
+    locked_documents:
+      - "architecture/approved-architecture.md"
+      - "architecture/tech-stack.yaml"
+
+    gates:
+      gate_5:
+        name: "Sprint Review"
+        owner: "project_manager"
+        recurring: true
+        frequency: "end_of_sprint"
+        deliverables:
+          - "Completed tasks demo"
+          - "Sprint retrospective"
+          - "Next sprint plan"
+        approval_required: false
+        client_action: "Review completed work and provide feedback"
+
+        success_criteria:
+          - "Sprint goals achieved or variance explained"
+          - "Completed work demonstrated"
+          - "Next sprint planned"
+
+        next_gate: "gate_5"  # Repeats
+
+    escalation_triggers:
+      - condition: "Architecture change required"
+        action: "Escalate to client for approval"
+        blocks_execution: true
+
+      - condition: "Critical blocker encountered"
+        action: "Escalate to client immediately"
+        blocks_execution: true
+
+      - condition: "External dependency issue"
+        action: "Notify client, PM finds workaround"
+        blocks_execution: false
+
+    phase_completion:
+      trigger: "All epics marked complete"
+      validation:
+        - "All stories completed"
+        - "All tests passing"
+        - "Documentation updated"
+        - "Client final approval"
+
+# Transition Rules
+transitions:
+  design_to_execution:
+    required_approvals:
+      - gate_1
+      - gate_2
+      - gate_3
+      - gate_4
+
+    client_command: "Begin Execution"
+
+    changes_on_transition:
+      - "Activate all 9 agents"
+      - "Lock architecture documents"
+      - "Set autonomy_level to 90"
+      - "PM takes coordination role"
+
+  execution_to_design:
+    trigger: "Architecture change required and client approves return to design"
+
+    changes_on_transition:
+      - "Pause execution agents"
+      - "Unlock architecture if approved"
+      - "Re-run Gate 3 with new options"
+      - "Client re-approves architecture"
+
+# Agent Responsibilities by Phase
+agent_behaviors:
+  design_phase:
+    project_manager:
+      - "Present gates to client"
+      - "Coordinate PO and Architect"
+      - "Ensure client understands options"
+
+    product_owner:
+      - "Create PSA"
+      - "Create epics and stories"
+      - "Define acceptance criteria"
+      - "Present to client for approval"
+
+    solution_architect:
+      - "Research technical options"
+      - "Present 2-3 options for each decision"
+      - "Provide pros/cons comparisons"
+      - "NEVER make final technical decisions"
+      - "Document client's choices"
+      - "Create detailed architecture"
+
+    developers:
+      - "Silent, waiting"
+      - "May be consulted by architect for feasibility"
+
+  execution_phase:
+    project_manager:
+      - "Coordinate all agents"
+      - "Track sprint progress"
+      - "Run sprint reviews"
+      - "Escalate blockers"
+
+    product_owner:
+      - "Refine stories autonomously"
+      - "Clarify requirements for dev team"
+      - "Validate completed work"
+
+    solution_architect:
+      - "Enforce approved architecture"
+      - "Review code for architecture compliance"
+      - "Make minor technical decisions (document as ADRs)"
+      - "Escalate if architecture change needed"
+
+    developers:
+      - "Implement features autonomously"
+      - "Follow approved architecture"
+      - "Collaborate via PM coordination"
+      - "Write tests"
+      - "Create PRs"
+
+    devops:
+      - "Set up CI/CD per architecture"
+      - "Manage deployments"
+      - "Monitor infrastructure"
+
+    qa:
+      - "Write automated tests"
+      - "Perform manual testing"
+      - "Validate acceptance criteria"
+      - "Report bugs"
+      - "Review ALL stories before completion (mandatory peer review)"
+      - "Verify no stub implementations exist"
+      - "Run tests to confirm they pass"
+      - "Reject stories that don't meet Definition of Done"
+
+# Story Completion Workflow
+story_lifecycle:
+  states:
+    - todo
+    - in_progress
+    - code_review      # NEW: Mandatory review state
+    - testing          # NEW: QA verification state
+    - done
+
+  transitions:
+    to_in_progress:
+      from: "todo"
+      trigger: "Developer agent starts work"
+      required: "PM assigns story to agent"
+
+    to_code_review:
+      from: "in_progress"
+      trigger: "Developer claims work is complete"
+      required:
+        - "Code committed"
+        - "Tests written"
+        - "Build passes"
+      action: "PM assigns different agent as reviewer"
+
+    to_testing:
+      from: "code_review"
+      trigger: "Code reviewer approves implementation"
+      required:
+        - "Reviewer verified code exists (no stubs)"
+        - "Reviewer ran tests and confirmed passing"
+        - "Review checklist completed"
+        - "Review documented"
+      action: "PM assigns QA agent for final verification"
+
+    to_done:
+      from: "testing"
+      trigger: "QA verifies all acceptance criteria met"
+      required:
+        - "QA ran all tests and confirmed passing"
+        - "QA verified feature works manually"
+        - "All Definition of Done items checked"
+        - "PM spot-checked actual code"
+        - "No stubs/placeholders remain"
+      action: "PM updates status.yaml with completion"
+      verification: "PM must read code and run tests before marking done"
+
+  rejection_paths:
+    code_review_rejects:
+      from: "code_review"
+      to: "in_progress"
+      reason: "Stubs found, tests failing, or criteria not met"
+      action: "Developer fixes issues and re-submits"
+
+    testing_rejects:
+      from: "testing"
+      to: "in_progress"
+      reason: "Tests failing or feature doesn't work"
+      action: "Developer fixes issues, goes through review again"
+
+# Quality Gates for Story Completion
+story_completion_gates:
+  gate_review:
+    name: "Peer Code Review"
+    owner: "Assigned reviewer (different agent)"
+    mandatory: true
+    checklist:
+      - "Read actual code files (not just status)"
+      - "Verify no stub implementations (no 'not yet implemented')"
+      - "Run tests and confirm they pass"
+      - "Check all acceptance criteria are met"
+      - "Verify code compiles and builds"
+    deliverable: "Review report documenting verification"
+
+  gate_qa:
+    name: "QA Verification"
+    owner: "qa_automation OR qa_manual"
+    mandatory: true
+    checklist:
+      - "Run all tests for this story"
+      - "Manually test the feature"
+      - "Verify Definition of Done is met"
+      - "Check no regression in other features"
+    deliverable: "QA sign-off report"
+
+  gate_pm_verification:
+    name: "PM Final Verification"
+    owner: "project_manager"
+    mandatory: true
+    checklist:
+      - "Read review report from reviewer"
+      - "Read QA report"
+      - "Spot-check code files"
+      - "Run build and tests"
+      - "Verify status matches reality"
+    deliverable: "Status update in status.yaml"

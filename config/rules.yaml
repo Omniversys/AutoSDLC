@@ -1,0 +1,178 @@
+# Business Rules and Constraints
+# These rules are enforced throughout the workflow
+
+rules:
+  # Phase 1: Design Phase Rules
+  design_phase:
+    - rule: "No code implementation before Gate 3 approval"
+      enforcement: "strict"
+      penalty: "Block all code-writing agents"
+
+    - rule: "Solution Architect presents OPTIONS only, never final decisions"
+      enforcement: "strict"
+      penalty: "Require re-presentation with multiple options"
+
+    - rule: "All gates require explicit client approval"
+      enforcement: "strict"
+      penalty: "Cannot proceed to next gate"
+
+    - rule: "Product Owner must include acceptance criteria for all stories"
+      enforcement: "strict"
+      penalty: "Story rejected, must be revised"
+
+  # Phase 2: Execution Phase Rules
+  execution_phase:
+    - rule: "No tech stack changes without client approval"
+      enforcement: "strict"
+      penalty: "Change blocked, escalated to PM"
+
+    - rule: "All code must have tests before PR merge"
+      enforcement: "moderate"
+      penalty: "QA team must approve override"
+
+    - rule: "Architecture decisions must be documented as ADRs"
+      enforcement: "moderate"
+      penalty: "Reminder issued, tracked in status"
+
+    - rule: "Sprint reviews required every sprint"
+      enforcement: "strict"
+      penalty: "Next sprint cannot start"
+
+    - rule: "PM must delegate ALL technical tasks to agents"
+      enforcement: "strict"
+      penalty: "PM blocked from technical work, must use agents"
+      details:
+        - "PM never writes code, runs commands, or fixes bugs directly"
+        - "PM only: coordinates, tracks todos, reports, escalates"
+        - "Minimum agent usage: any task >5 minutes must go to agent"
+        - "Even quick fixes go to agents to preserve context"
+        - "PM allowed: read files, update todos, report status"
+        - "PM forbidden: write code, edit code, run builds/tests, debug"
+
+    # ===== STORY COMPLETION RULES (CRITICAL QUALITY GATES) =====
+    - rule: "Every story MUST be reviewed by a different agent before completion"
+      enforcement: "strict"
+      penalty: "Story marked incomplete, must be re-reviewed"
+      details:
+        - "Implementer agent CANNOT mark their own story as complete"
+        - "Reviewer must be different type (e.g., QA reviews dev work)"
+        - "PM assigns reviewer when story moves to 'review' status"
+        - "Review must be documented in story completion report"
+
+      review_requirements:
+        developer_stories:
+          reviewer: "qa_automation OR qa_manual"
+          checklist:
+            - "All code files exist and compile successfully"
+            - "All functions/classes mentioned in story are implemented"
+            - "Tests are written and passing (run tests to verify)"
+            - "No stub/placeholder implementations remain"
+            - "Code follows approved architecture"
+            - "Documentation is complete"
+
+        infrastructure_stories:
+          reviewer: "solution_architect OR backend_developer"
+          checklist:
+            - "Configuration files exist and are valid"
+            - "Services start successfully"
+            - "Integration tests pass"
+            - "Documentation updated"
+
+        documentation_stories:
+          reviewer: "product_owner OR solution_architect"
+          checklist:
+            - "All sections filled (no TODOs or placeholders)"
+            - "Examples are tested and work"
+            - "Links are valid"
+            - "Technical accuracy verified"
+
+    - rule: "Story completion requires verifiable evidence of 100% completion"
+      enforcement: "strict"
+      penalty: "Story rejected, returned to implementer"
+      details:
+        - "NEVER mark story complete based on status reports alone"
+        - "Reviewer MUST read actual code/files to verify completion"
+        - "Reviewer MUST run tests to verify they pass"
+        - "If story says 'implement command X', reviewer must verify command works"
+        - "Stub implementations with console.log/TODO are NOT complete"
+
+      required_evidence:
+        - "Code files exist at expected paths"
+        - "All acceptance criteria are verifiably met"
+        - "Tests exist and pass (run them!)"
+        - "No placeholder/stub code remains"
+        - "Feature actually works when executed"
+        - "Documentation matches implementation"
+
+      verification_steps:
+        step_1: "Read the story acceptance criteria"
+        step_2: "Read the actual code files (not status reports)"
+        step_3: "Run the tests for this story"
+        step_4: "Test the feature manually if applicable"
+        step_5: "Verify no stubs/placeholders remain"
+        step_6: "Document verification results"
+        step_7: "Only then mark as complete"
+
+    - rule: "Definition of Done must be met before story completion"
+      enforcement: "strict"
+      penalty: "Story incomplete, must fix deficiencies"
+
+      definition_of_done:
+        code_implementation:
+          - "All functions/classes from story exist (no stubs)"
+          - "Implementation matches acceptance criteria exactly"
+          - "No console.log placeholder messages"
+          - "No 'not yet implemented' or 'TODO' comments"
+          - "Code compiles without errors"
+          - "No TypeScript 'any' types without justification"
+
+        testing:
+          - "Unit tests written and passing"
+          - "Integration tests if applicable"
+          - "Test coverage meets project threshold"
+          - "Tests actually test the implementation (not mocks only)"
+          - "Reviewer runs tests and sees them pass"
+
+        documentation:
+          - "TSDoc/JSDoc for all public APIs"
+          - "README updated if needed"
+          - "Examples work when copy-pasted"
+          - "No placeholder sections"
+
+        quality:
+          - "Linting passes"
+          - "Build succeeds"
+          - "No regression in other tests"
+          - "Follows approved architecture"
+
+    - rule: "PM must verify story completion evidence before updating status"
+      enforcement: "strict"
+      penalty: "Status update rejected, PM must re-verify"
+      details:
+        - "PM receives completion report from reviewer"
+        - "PM spot-checks by reading actual code"
+        - "PM runs build/tests to verify claims"
+        - "PM only updates status.yaml after verification"
+        - "If evidence is lacking, PM sends back to implementer"
+
+  # General Rules
+  general:
+    - rule: "PM is single point of contact with client"
+      enforcement: "strict"
+      penalty: "Agent communications redirected through PM"
+
+    - rule: "All documents follow templates"
+      enforcement: "moderate"
+      penalty: "Document rejected, must use template"
+
+    - rule: "Status must be updated after each task completion"
+      enforcement: "moderate"
+      penalty: "Reminder issued"
+
+# Critical Blockers (escalate to client immediately)
+critical_blockers:
+  - "Architecture approval required but conflicting requirements"
+  - "External dependency unavailable"
+  - "Security vulnerability discovered"
+  - "Budget or timeline cannot be met"
+  - "Technical feasibility issue with approved architecture"

@@ -1,0 +1,214 @@
+# GitHub Copilot Adaptations for AutoSDLC
+# Optimizations specifically for GitHub Copilot's capabilities and limitations
+
+copilot_mode:
+  enabled: true
+  version: "1.0"
+  
+  # State Management
+  state_files:
+    primary: ".AutoSDLC/copilot-state.md"
+    action_plan: ".AutoSDLC/action-plan.md"
+    context_anchors: ".AutoSDLC/context-anchors.md"
+    behavior_triggers: ".AutoSDLC/behavior-triggers.md"
+    
+  # Word/Token Limits (optimized for Copilot's context window)
+  word_limits:
+    copilot_state: 200
+    action_plan: 300
+    context_anchors: 300
+    behavior_triggers: 250
+    total_short_term_budget: 1050
+    
+  # Long-term memory (load on-demand)
+  long_term_limits:
+    semantic_knowledge_base: 2000  # ~50KB
+    semantic_glossary: 500
+    episodic_per_agent: 1500
+    procedural_agent_skills: 2000
+    procedural_user_preferences: 1500
+    
+  # Update Triggers
+  auto_update_on:
+    - "task_complete"
+    - "test_pass"
+    - "code_commit"
+    - "gate_transition"
+    - "blocker_encountered"
+    - "session_end"
+    
+  # Autonomous Behaviors (what Copilot can do without asking)
+  autonomous_actions:
+    - "write_code"
+    - "write_tests"
+    - "run_tests"
+    - "fix_test_failures"
+    - "update_documentation"
+    - "refactor_code"
+    - "add_error_handling"
+    - "update_state_files"
+    
+  # Requires Approval (what Copilot must ask about)
+  requires_approval:
+    - "gate_transition"
+    - "architecture_change"
+    - "tech_stack_change"
+    - "skip_quality_gate"
+    - "delete_code"
+    - "security_changes"
+    - "production_deployment"
+    
+  # Proactive Prompts (what Copilot should say automatically)
+  auto_prompts:
+    on_conversation_start: "Reading state files and resuming work..."
+    on_task_complete: "Task complete. Updating state and moving to next task..."
+    on_tests_pass: "All tests passing. Checking off action plan item..."
+    on_continue: "Continuing with next action from plan..."
+    on_blocker: "Blocker encountered. Documenting and awaiting guidance..."
+
+# Memory Loading Strategy for Copilot
+
+memory_loading:
+  
+  # Always load (automatic - part of instructions)
+  always_load:
+    - ".AutoSDLC/copilot-state.md"
+    - ".AutoSDLC/action-plan.md"
+    
+  # Load at session start
+  session_start:
+    - ".AutoSDLC/copilot-state.md"
+    - ".AutoSDLC/memory/semantic/knowledge-base.md"
+    - ".AutoSDLC/memory/episodic/{current-agent}.md"
+    
+  # Load on-demand (when needed)
+  on_demand:
+    context_anchors:
+      when: "User asks 'what am I working on?' or context unclear"
+    
+    behavior_triggers:
+      when: "Uncertain what to do next or how to behave"
+    
+    glossary:
+      when: "Domain terminology confusion"
+    
+    agent_skills:
+      when: "Doing a task for the first time or need procedure reminder"
+    
+    user_preferences:
+      when: "User gives feedback about style or approach"
+    
+    other_agent_episodic:
+      when: "Collaborating with another agent"
+
+# Optimization Strategies
+
+optimization:
+  
+  # Keep short-term memory compact
+  short_term:
+    - "Use abbreviations where clear"
+    - "Remove completed items from checklists periodically"
+    - "Keep 'Recent Changes' to last 3 only"
+    - "Use bullet points instead of paragraphs"
+    
+  # Lazy-load long-term memory
+  long_term:
+    - "Only load semantic memory when architecture questions arise"
+    - "Only load episodic memory at session start and end"
+    - "Only load procedural memory when executing procedures"
+    - "Cache loaded memories within session"
+  
+  # Progressive disclosure
+  disclosure:
+    - "Start with copilot-state.md (essential context)"
+    - "Add action-plan.md if user wants to continue"
+    - "Add semantic/episodic only when needed for decision"
+    - "Load procedural only when executing specific procedures"
+
+# Copilot-Specific Behaviors
+
+behaviors:
+  
+  # How to handle Copilot's limitations
+  limitations:
+    
+    statelessness:
+      strategy: "Rely heavily on copilot-state.md - it's the memory"
+      mitigation: "Always read copilot-state.md first in every interaction"
+      
+    smaller_context:
+      strategy: "Use compact formats and load selectively"
+      mitigation: "Prioritize recent/relevant info over completeness"
+      
+    less_proactive:
+      strategy: "Rely on behavior-triggers.md to know when to act"
+      mitigation: "User may need to explicitly say 'continue' or 'status'"
+      
+    explicit_loading:
+      strategy: "User may need to use @workspace to load files"
+      mitigation: "Instructions remind user to use @workspace for long-term memory"
+  
+  # Enhanced prompting for Copilot
+  prompt_patterns:
+    
+    session_start:
+      user_should_say: "@workspace Check .AutoSDLC/copilot-state.md and continue"
+      copilot_does: "Loads state, shows current context, asks if continuing"
+      
+    continue_work:
+      user_should_say: "continue or keep going"
+      copilot_does: "Executes next action-plan item automatically"
+      
+    check_status:
+      user_should_say: "status or where are we"
+      copilot_does: "Reads state and action-plan, shows summary"
+      
+    load_memory:
+      user_should_say: "@workspace Load memory for [topic]"
+      copilot_does: "Loads relevant semantic/episodic/procedural memory"
+
+# Integration with Core AutoSDLC
+
+AutoSDLC_integration:
+  
+  # Works alongside existing structure
+  compatibility:
+    - "All core AutoSDLC YAML configs remain unchanged"
+    - "ORCHESTRATOR.md remains primary instruction source"
+    - "Memory system is universal (works for Claude, Cursor, Copilot)"
+    - "Copilot files are additions, not replacements"
+  
+  # Entry points
+  entry_points:
+    copilot: ".github/copilot-instructions.md"
+    claude: "claude.md → ORCHESTRATOR.md"
+    cursor: ".cursorrules → ORCHESTRATOR.md"
+    
+  # All tools use same memory
+  universal_memory:
+    - ".AutoSDLC/memory/ is tool-agnostic"
+    - "All tools read/write same memory files"
+    - "No tool-specific memory formats"
+
+# Usage Guidelines
+
+usage:
+  
+  for_users:
+    - "Start sessions with '@workspace Check copilot-state.md'"
+    - "Say 'continue' to have Copilot work autonomously"
+    - "Say 'status' to see where you are"
+    - "Use @workspace to load long-term memory when needed"
+    
+  for_copilot:
+    - "ALWAYS read copilot-state.md first"
+    - "Follow action-plan.md for autonomous work"
+    - "Update state files after significant actions"
+    - "Use behavior-triggers.md to know when to act"
+    - "Load long-term memory only when needed"
+
+---
+# This configuration optimizes AutoSDLC for GitHub Copilot
+# While maintaining compatibility with Claude and Cursor
+# Last Updated: {LAST_UPDATE_DATE}

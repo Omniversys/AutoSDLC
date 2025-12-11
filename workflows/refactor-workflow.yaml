@@ -1,0 +1,500 @@
+# Refactor Workflow
+# Code quality improvement workflow with no behavior changes
+# Focus: Structure improvement, tech debt reduction, maintainability
+
+workflow_name: "refactor"
+version: "1.0"
+description: "Improve code quality and structure without changing behavior"
+
+# Documentation Configuration
+documentation:
+  mode: "moderate"
+
+  templates:
+    directory: "templates/moderate/"
+    load_only:
+      - "story-lite.template.md"
+      - "design-options.template.md"
+    skip:
+      - "PSA.template.md"
+      - "epic.template.md"
+
+  session_context:
+    format: "moderate"
+    template: "templates/session-context/moderate.template.md"
+    update_frequency: "checkpoint"
+    max_words: 500
+
+  directory_structure:
+    create:
+      - ".AutoSDLC/"
+      - ".AutoSDLC/quality-reports/"
+      - "docs/refactors/"
+      - "docs/stories/"
+    skip:
+      - "docs/epics/"
+      - "architecture/proposals/"
+
+  quality_reports:
+    type: "per_story"
+    location: "docs/refactors/"
+
+# Single phase with 3 gates
+phase:
+  name: "Code Quality Improvement"
+  description: "Analyze, plan, and execute refactoring with continuous verification"
+  autonomy_level: 50  # Collaborative - you choose approach
+
+  active_agents:
+    - solution_architect  # Code analysis and strategy
+    - backend_developer   # Or frontend_developer based on code
+    - frontend_developer
+    - qa_automation      # Continuous verification
+    - qa_manual          # Functional equivalence testing
+
+  gates:
+    gate_1:
+      name: "Code Quality Analysis"
+      owner: "solution_architect + qa_automation"
+      deliverables:
+        - "docs/refactors/REFACTOR-{ID}-analysis.md"
+        - "Code metrics report"
+      approval_required: true
+      client_action: "Review findings and approve refactoring scope"
+
+      process:
+        1_analyze_code_smells:
+          - "Run static analysis tools (complexity, duplication, etc.)"
+          - "Identify code smells:"
+          - "  • Long methods/functions (>50 lines)"
+          - "  • Large classes (>300 lines)"
+          - "  • Duplicate code"
+          - "  • Deep nesting (>3 levels)"
+          - "  • High cyclomatic complexity (>10)"
+          - "  • Poor naming conventions"
+          - "  • Magic numbers/strings"
+          - "  • Tight coupling"
+          - "  • Missing abstractions"
+
+        2_measure_metrics:
+          - "Document current metrics:"
+          - "  • Cyclomatic complexity"
+          - "  • Lines of code per file/function"
+          - "  • Code duplication percentage"
+          - "  • Test coverage percentage"
+          - "  • Coupling between objects (CBO)"
+          - "  • Lack of cohesion (LCOM)"
+
+        3_identify_tech_debt:
+          - "Find technical debt:"
+          - "  • Outdated patterns (e.g., callback hell)"
+          - "  • Missing tests"
+          - "  • Performance bottlenecks"
+          - "  • Security antipatterns"
+          - "  • TODO comments and hacks"
+          - "  • Commented-out code"
+          - "  • Deprecated API usage"
+
+        4_assess_impact:
+          - "Determine scope of refactor:"
+          - "  • Which files/modules affected"
+          - "  • Current test coverage"
+          - "  • Dependencies and dependents"
+          - "  • Risk level (Low/Medium/High)"
+          - "  • Estimated time investment"
+
+        5_present_findings:
+          - "Create analysis report with:"
+          - "  • Code quality issues found"
+          - "  • Current vs target metrics"
+          - "  • Visual representations (graphs/charts)"
+          - "  • Prioritized list of improvements"
+          - "  • Risk assessment"
+
+      success_criteria:
+        - "Code quality issues documented"
+        - "Metrics baseline established"
+        - "Impact assessed"
+        - "Client approves scope and priorities"
+
+      next_gate: "gate_2"
+
+    gate_2:
+      name: "Refactoring Strategy"
+      owner: "solution_architect"
+      deliverables:
+        - "docs/refactors/REFACTOR-{ID}-strategy.md"
+        - "Step-by-step refactoring plan"
+      approval_required: true
+      client_action: "Choose refactoring approach and approve plan"
+
+      process:
+        1_present_approaches:
+          - "Option A: Conservative Incremental Refactor"
+          - "  Description:"
+          - "    • Small, safe changes one at a time"
+          - "    • Extract functions/methods"
+          - "    • Rename for clarity"
+          - "    • Remove code duplication"
+          - "  Pros:"
+          - "    • Very low risk"
+          - "    • Easy to review"
+          - "    • Can rollback easily"
+          - "    • Good for production-critical code"
+          - "  Cons:"
+          - "    • May not address deep structural issues"
+          - "    • Takes longer for major improvements"
+          - "  Time: 4-8 hours"
+          - "  Risk: Low"
+          - ""
+          - "Option B: Moderate Restructure"
+          - "  Description:"
+          - "    • Extract classes/modules"
+          - "    • Introduce design patterns"
+          - "    • Reorganize file structure"
+          - "    • Improve abstraction layers"
+          - "  Pros:"
+          - "    • Significant quality improvement"
+          - "    • Balances risk and reward"
+          - "    • Addresses architectural issues"
+          - "  Cons:"
+          - "    • More testing needed"
+          - "    • Larger code review"
+          - "  Time: 1-2 days"
+          - "  Risk: Medium"
+          - ""
+          - "Option C: Comprehensive Rewrite"
+          - "  Description:"
+          - "    • Complete module redesign"
+          - "    • New architecture patterns"
+          - "    • Modern best practices"
+          - "    • Full test suite creation"
+          - "  Pros:"
+          - "    • Solves deep-rooted problems"
+          - "    • Clean slate opportunity"
+          - "    • Long-term maintainability"
+          - "  Cons:"
+          - "    • Higher risk"
+          - "    • Longer timeline"
+          - "    • Requires extensive testing"
+          - "  Time: 2-5 days"
+          - "  Risk: High"
+
+        2_detailed_plan:
+          - "For chosen approach, create step-by-step plan:"
+          - "  Step 1: [Specific refactoring task]"
+          - "  Step 2: [Next task]"
+          - "  ..."
+          - "Each step should be:"
+          - "  • Small enough to commit independently"
+          - "  • Testable after completion"
+          - "  • Reversible if needed"
+
+        3_test_strategy:
+          - "Define testing approach:"
+          - "  • Establish test baseline (all tests pass)"
+          - "  • Add missing tests before refactoring"
+          - "  • Run tests after each step"
+          - "  • Add snapshot/golden tests for complex logic"
+          - "  • Manual testing for UI changes"
+          - "  • Performance benchmarks if relevant"
+
+        4_rollback_plan:
+          - "Define rollback strategy:"
+          - "  • Git branch for refactoring work"
+          - "  • Commit after each successful step"
+          - "  • Document revert procedure"
+          - "  • Identify safe rollback points"
+
+        5_before_after_examples:
+          - "Show concrete examples:"
+          - "  • Before: Current code structure"
+          - "  • After: Proposed structure"
+          - "  • Highlight improvements"
+
+      success_criteria:
+        - "Refactoring approaches presented with tradeoffs"
+        - "Detailed plan created for chosen approach"
+        - "Test strategy defined"
+        - "Rollback plan documented"
+        - "Client chooses approach and approves plan"
+
+      next_gate: "gate_3"
+
+    gate_3:
+      name: "Refactor & Verification"
+      owner: "developer + qa_automation + qa_manual"
+      deliverables:
+        - "Refactored code (committed)"
+        - "Updated tests"
+        - "Updated documentation"
+        - "docs/refactors/REFACTOR-{ID}-completion.md"
+        - "Before/after metrics comparison"
+      approval_required: true
+      client_action: "Review improvements and approve completion"
+
+      process:
+        1_establish_baseline:
+          - "CRITICAL: Establish working baseline first"
+          - "  • Run ALL existing tests → MUST PASS 100%"
+          - "  • Document current behavior"
+          - "  • Create baseline metrics"
+          - "  • Take code snapshot for comparison"
+          - "  • If tests fail, fix tests first before refactoring"
+
+        2_add_missing_tests:
+          - "Before refactoring, add tests for untested code:"
+          - "  • Identify code without test coverage"
+          - "  • Write tests that verify current behavior"
+          - "  • Ensure new tests pass"
+          - "  • Goal: >80% coverage before refactoring"
+
+        3_refactor_incrementally:
+          - "Execute refactoring in small steps:"
+          - "  • Work on ONE thing at a time"
+          - "  • Make change"
+          - "  • Run ALL tests → MUST PASS"
+          - "  • Commit with descriptive message"
+          - "  • Repeat"
+          - ""
+          - "Refactoring techniques to use:"
+          - "  • Extract Method/Function"
+          - "  • Extract Class/Module"
+          - "  • Rename (variables, functions, classes)"
+          - "  • Move Method/Function"
+          - "  • Inline (remove unnecessary abstractions)"
+          - "  • Replace Conditional with Polymorphism"
+          - "  • Introduce Parameter Object"
+          - "  • Replace Magic Numbers with Constants"
+
+        4_continuous_verification:
+          - "After EVERY commit:"
+          - "  • Run full test suite"
+          - "  • Check code coverage (should maintain or improve)"
+          - "  • Run linter"
+          - "  • Run type checker (if applicable)"
+          - "  • Verify build succeeds"
+          - "  • Check performance (no regression)"
+          - ""
+          - "If ANY test fails:"
+          - "  • STOP immediately"
+          - "  • Fix the issue"
+          - "  • Do NOT proceed until green"
+
+        5_quality_gates:
+          - "Peer Code Review (by different agent):"
+          - "  • Review refactoring commits"
+          - "  • Verify no behavior changes"
+          - "  • Check code quality improved"
+          - "  • Ensure no new issues introduced"
+          - ""
+          - "QA Verification:"
+          - "  • Run full regression test suite"
+          - "  • Manual testing if UI affected"
+          - "  • Verify functional equivalence"
+          - "  • Check no new bugs introduced"
+          - "  • Verify performance maintained/improved"
+          - ""
+          - "Architect Review:"
+          - "  • Verify design improvements achieved"
+          - "  • Check metrics improved"
+          - "  • Confirm no architectural violations"
+          - "  • Validate against original goals"
+
+        6_measure_improvements:
+          - "Compare before/after metrics:"
+          - "  • Cyclomatic complexity reduction"
+          - "  • Code duplication reduction"
+          - "  • Test coverage increase"
+          - "  • File/function size reduction"
+          - "  • Coupling reduction"
+          - "  • Performance impact"
+
+        7_update_documentation:
+          - "Update relevant documentation:"
+          - "  • Code comments (if logic changed)"
+          - "  • README (if structure changed)"
+          - "  • Architecture docs (if patterns changed)"
+          - "  • API docs (if interfaces changed)"
+          - "  • Migration guide (for other developers)"
+
+        8_completion_report:
+          - "Create completion report with:"
+          - "  • What was refactored and why"
+          - "  • Before/after code examples"
+          - "  • Metrics improvement comparison"
+          - "  • Test coverage changes"
+          - "  • Lessons learned"
+          - "  • Recommended follow-up refactorings"
+
+      success_criteria:
+        - "ALL existing tests pass (100%)"
+        - "No behavior changes (functional equivalence verified)"
+        - "Code metrics improved from baseline"
+        - "Test coverage maintained or improved"
+        - "No new bugs introduced"
+        - "Code review approved"
+        - "QA verification passed"
+        - "Documentation updated"
+        - "Client approves improvements"
+
+      completion_trigger: "Refactoring complete, verified, and approved"
+
+# Refactor-Specific Rules (CRITICAL)
+rules:
+  golden_rules:
+    - "⚠️  NO new features - refactor only"
+    - "✅  ALL existing tests MUST pass after EVERY change"
+    - "✅  NO behavior changes - functional equivalence required"
+    - "✅  Small incremental commits (easy to review/rollback)"
+    - "✅  Test after EVERY commit"
+    - "⚠️  STOP if tests fail - fix before proceeding"
+    - "✅  Add tests for previously untested code"
+
+  scope_control:
+    - "Fix structure and quality ONLY"
+    - "No new functionality"
+    - "No bug fixes (unless blocking refactor)"
+    - "No performance optimizations (unless part of plan)"
+    - "Stay within approved scope"
+
+  quality_assurance:
+    - "100% test pass rate mandatory"
+    - "Code review required for all changes"
+    - "QA must verify functional equivalence"
+    - "Metrics must show improvement"
+    - "No increase in complexity allowed"
+
+  safety_practices:
+    - "Work on feature branch"
+    - "Commit after each successful step"
+    - "Keep commits small and focused"
+    - "Write descriptive commit messages"
+    - "Have rollback plan ready"
+    - "Continuous integration checks"
+
+# Agent Responsibilities
+agent_behaviors:
+  solution_architect:
+    - "Act as code quality expert"
+    - "Analyze code with critical eye"
+    - "Identify smells and antipatterns"
+    - "Present refactoring options objectively"
+    - "NEVER decide approach - client chooses"
+    - "Verify improvements at completion"
+    - "Measure before/after metrics"
+
+  developer:
+    - "Execute refactoring plan precisely"
+    - "Make small, incremental changes"
+    - "Run tests after EVERY change"
+    - "Commit frequently with clear messages"
+    - "No feature additions or bug fixes"
+    - "Focus on code quality only"
+    - "Request review when step complete"
+
+  qa_automation:
+    - "Establish test baseline"
+    - "Add missing tests before refactor"
+    - "Run full test suite continuously"
+    - "Monitor test coverage"
+    - "Verify no behavior changes"
+    - "Report any test failures immediately"
+
+  qa_manual:
+    - "Verify functional equivalence"
+    - "Manual testing for UI changes"
+    - "Check user-facing behavior unchanged"
+    - "Performance verification"
+    - "Regression testing"
+    - "Sign off on refactoring completion"
+
+# Expected Timeline
+timeline:
+  gate_1: "1-2 hours (analysis and metrics)"
+  gate_2: "1-2 hours (strategy and planning)"
+  gate_3: "4 hours - 3 days (depending on approach chosen)"
+  total_conservative: "8 hours"
+  total_moderate: "1-2 days"
+  total_comprehensive: "2-5 days"
+
+# Escalation Triggers
+escalations:
+  - condition: "Tests fail and cannot be fixed quickly"
+    action: "Escalate to client - may need to abort refactor"
+
+  - condition: "Scope creep detected (feature requests)"
+    action: "Remind about refactor-only rule, escalate if persists"
+
+  - condition: "Behavior changes discovered"
+    action: "STOP immediately, revert changes, analyze why"
+
+  - condition: "Refactoring reveals bugs"
+    action: "Document bugs, complete refactor, then fix bugs separately"
+
+  - condition: "Estimated time significantly exceeded"
+    action: "Present status to client, get approval to continue"
+
+# Success Metrics
+success_metrics:
+  code_quality:
+    - "Cyclomatic complexity reduced by 20%+"
+    - "Code duplication reduced by 30%+"
+    - "Average function size reduced"
+    - "File sizes more uniform"
+    - "Better separation of concerns"
+
+  testing:
+    - "Test coverage maintained or improved"
+    - "100% test pass rate maintained"
+    - "No new bugs introduced"
+    - "Tests run faster (if possible)"
+
+  maintainability:
+    - "Easier to understand (team feedback)"
+    - "Easier to extend"
+    - "Better code organization"
+    - "Clearer naming"
+    - "Better documentation"
+
+# Common Refactoring Patterns
+refactoring_catalog:
+  extract_method:
+    when: "Function is too long or doing multiple things"
+    action: "Extract logical blocks into named functions"
+    risk: "Low"
+
+  extract_class:
+    when: "Class has too many responsibilities"
+    action: "Split into multiple focused classes"
+    risk: "Medium"
+
+  rename:
+    when: "Names are unclear or misleading"
+    action: "Rename to be descriptive and accurate"
+    risk: "Low (with good tooling)"
+
+  introduce_parameter_object:
+    when: "Functions have long parameter lists"
+    action: "Group related parameters into object"
+    risk: "Low"
+
+  replace_conditional_with_polymorphism:
+    when: "Complex switch/if-else based on type"
+    action: "Use polymorphism/strategy pattern"
+    risk: "Medium-High"
+
+  inline_method:
+    when: "Method body is as clear as name"
+    action: "Remove unnecessary indirection"
+    risk: "Low"
+
+  move_method:
+    when: "Method is in wrong class"
+    action: "Move to class that uses it most"
+    risk: "Medium"
+
+  replace_magic_number:
+    when: "Unexplained literal values"
+    action: "Extract to named constant"
+    risk: "Low"

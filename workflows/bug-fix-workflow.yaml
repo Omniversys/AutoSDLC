@@ -1,0 +1,195 @@
+# Bug Fix Workflow
+# Lightweight workflow for focused bug fixing
+# Focus: Code analysis, root cause, targeted fix
+
+workflow_name: "bug-fix"
+version: "1.0"
+description: "Fast-track workflow for bug fixes with focused analysis and verification"
+
+# Documentation Configuration
+documentation:
+  mode: "minimal"
+
+  templates:
+    directory: "templates/minimal/"
+    load_only:
+      - "bug-report.template.md"
+      - "fix-verification.template.md"
+    skip:
+      - "PSA.template.md"
+      - "epic.template.md"
+      - "story.template.md"
+      - "task.template.md"
+      - "adr.template.md"
+      - "proposal.template.md"
+
+  session_context:
+    format: "compact"
+    template: "templates/session-context/compact.template.md"
+    update_frequency: "gate_only"
+    max_words: 200
+
+  directory_structure:
+    create:
+      - ".AutoSDLC/"
+      - ".AutoSDLC/quality-reports/"
+      - "docs/bug-fixes/"
+    skip:
+      - "docs/epics/"
+      - "docs/stories/"
+      - "docs/tasks/"
+      - "architecture/decisions/"
+
+  quality_reports:
+    type: "inline"
+    location: "in_bug_report"
+
+# Single phase - no design/execution split needed for bugs
+phase:
+  name: "Bug Fix"
+  description: "Analyze root cause, implement fix, verify resolution"
+  autonomy_level: 50  # Collaborative - you choose fix approach
+
+  active_agents:
+    - solution_architect  # Root cause analysis
+    - backend_developer   # Or frontend_developer based on bug location
+    - frontend_developer
+    - qa_automation      # Verification & regression testing
+
+  gates:
+    gate_1:
+      name: "Problem Analysis & Fix Approach"
+      owner: "solution_architect"
+      deliverables:
+        - "docs/bugs/BUG-{ID}-analysis.md"
+      approval_required: true
+      client_action: "Choose fix approach from options"
+
+      process:
+        1_understand:
+          - "Read bug report from user"
+          - "Reproduce the bug if possible"
+          - "Analyze relevant code files"
+          - "Identify root cause"
+
+        2_research:
+          - "Search codebase for similar patterns"
+          - "Identify affected components"
+          - "Assess blast radius of potential fixes"
+
+        3_propose:
+          - "Present 2-3 fix approaches"
+          - "For each approach provide:"
+          - "  • What needs to change"
+          - "  • Risk level (Low/Medium/High)"
+          - "  • Time estimate"
+          - "  • Pros and cons"
+          - "  • Potential side effects"
+
+      success_criteria:
+        - "Root cause identified"
+        - "Fix approaches presented with tradeoffs"
+        - "Client chooses approach"
+
+      next_gate: "gate_2"
+
+    gate_2:
+      name: "Implementation & Verification"
+      owner: "developer + qa_automation"
+      deliverables:
+        - "Code changes (fix implemented)"
+        - "Tests added for bug scenario"
+        - "docs/bugs/BUG-{ID}-verification.md"
+      approval_required: true
+      client_action: "Review fix and approve"
+
+      process:
+        1_implement:
+          - "Developer implements chosen fix approach"
+          - "Follow approved architecture patterns"
+          - "Add regression test for this specific bug"
+          - "Ensure existing tests still pass"
+
+        2_peer_review:
+          - "Different agent reviews the fix"
+          - "Verify fix addresses root cause"
+          - "Check for potential side effects"
+          - "Confirm no stubs or TODOs remain"
+
+        3_qa_verify:
+          - "QA runs all tests (must pass)"
+          - "QA verifies bug is resolved"
+          - "QA checks for regression"
+          - "QA manually tests the fix if applicable"
+
+        4_document:
+          - "Document what was changed and why"
+          - "Note any follow-up items"
+          - "Update relevant documentation"
+
+      success_criteria:
+        - "Fix implemented with no stubs"
+        - "All tests passing (including new regression test)"
+        - "Bug verified as resolved"
+        - "No regression in other features"
+        - "Client reviews and approves"
+
+      completion_trigger: "Bug resolved and verified"
+
+# Bug Fix Specific Rules
+rules:
+  scope_control:
+    - "Fix ONLY the reported bug - no feature additions"
+    - "Minimize code changes - surgical fix"
+    - "If fix requires architecture change, escalate to client"
+
+  quality:
+    - "MUST add regression test for this bug"
+    - "ALL existing tests must still pass"
+    - "No stubs or placeholder code"
+    - "Code review by different agent mandatory"
+
+  documentation:
+    - "Document root cause in analysis"
+    - "Document fix approach chosen"
+    - "Update inline comments if code logic changed"
+
+# Agent Responsibilities
+agent_behaviors:
+  solution_architect:
+    - "Act as detective - find root cause"
+    - "Read relevant code files deeply"
+    - "Present fix options with honest tradeoffs"
+    - "NEVER make the decision - client chooses"
+    - "Consider technical debt implications"
+
+  developer:
+    - "Implement chosen fix precisely"
+    - "No scope creep - fix bug only"
+    - "Add regression test"
+    - "Ensure all tests pass"
+    - "Request review when done"
+
+  qa_automation:
+    - "Verify bug is resolved"
+    - "Run full test suite"
+    - "Check for regression"
+    - "Manual test if needed"
+    - "Document verification results"
+
+# Expected Timeline
+timeline:
+  gate_1: "15-30 minutes (analysis & options)"
+  gate_2: "30-60 minutes (implementation & verification)"
+  total: "45-90 minutes for typical bug"
+
+# Escalation Triggers
+escalations:
+  - condition: "Root cause requires architecture change"
+    action: "Escalate to client - may need feature workflow"
+
+  - condition: "Fix would break existing functionality"
+    action: "Present tradeoffs to client for decision"
+
+  - condition: "Bug is actually a feature request"
+    action: "Switch to feature-workflow.yaml"

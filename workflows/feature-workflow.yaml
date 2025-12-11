@@ -1,0 +1,395 @@
+# Feature Development Workflow
+# Moderate workflow for adding features to existing projects
+# Focus: Feature design, deep codebase understanding, integration planning
+
+workflow_name: "feature-development"
+version: "1.0"
+description: "Balanced workflow for feature development with discussion and deep code analysis"
+
+# Documentation Configuration
+documentation:
+  mode: "moderate"
+
+  templates:
+    directory: "templates/moderate/"
+    load_only:
+      - "feature-brief.template.md"
+      - "story-lite.template.md"
+      - "design-options.template.md"
+    skip:
+      - "PSA.template.md"
+      - "epic.template.md"
+      - "task.template.md"
+
+  session_context:
+    format: "moderate"
+    template: "templates/session-context/moderate.template.md"
+    update_frequency: "checkpoint"
+    max_words: 500
+
+  directory_structure:
+    create:
+      - ".AutoSDLC/"
+      - ".AutoSDLC/quality-reports/"
+      - "docs/features/"
+      - "docs/stories/"
+      - "architecture/features/"
+    skip:
+      - "docs/epics/"
+
+  quality_reports:
+    type: "per_story"
+    location: "docs/features/"
+
+# Two phases: Scoping & Design → Implementation
+phases:
+  scoping:
+    name: "Feature Scoping & Design"
+    description: "Understand feature requirements and plan implementation"
+    autonomy_level: 40  # Collaborative - you make decisions
+
+    active_agents:
+      - project_manager
+      - product_owner
+      - solution_architect
+
+    gates:
+      gate_1:
+        name: "Feature Brief & Codebase Analysis"
+        owner: "product_owner + solution_architect"
+        deliverables:
+          - "docs/features/FEATURE-{ID}-brief.md"
+          - "docs/features/FEATURE-{ID}-codebase-analysis.md"
+        approval_required: true
+        client_action: "Discuss feature requirements and approve scope"
+
+        process:
+          1_understand_request:
+            - "Product Owner asks clarifying questions:"
+            - "  • What problem does this solve?"
+            - "  • Who are the users?"
+            - "  • What are the success criteria?"
+            - "  • Are there any constraints?"
+
+          2_explore_codebase:
+            - "Architect deeply analyzes existing code:"
+            - "  • Search for similar functionality"
+            - "  • Identify integration points"
+            - "  • Map dependencies"
+            - "  • Find existing patterns to follow"
+            - "  • Identify potential conflicts"
+
+          3_create_brief:
+            - "Product Owner creates feature brief:"
+            - "  • Feature description"
+            - "  • User stories (2-5 stories typical)"
+            - "  • Acceptance criteria for each story"
+            - "  • Dependencies on existing code"
+            - "  • Out of scope items"
+
+          4_discuss_with_client:
+            - "Present findings to client"
+            - "Discuss any discovered complexities"
+            - "Clarify scope boundaries"
+            - "Get approval to proceed"
+
+        success_criteria:
+          - "Feature requirements clearly documented"
+          - "Codebase integration points identified"
+          - "User stories created with acceptance criteria"
+          - "Client approves feature scope"
+
+        next_gate: "gate_2"
+
+      gate_2:
+        name: "Technical Design & Implementation Plan"
+        owner: "solution_architect"
+        deliverables:
+          - "architecture/features/FEATURE-{ID}-design.md"
+          - "docs/features/FEATURE-{ID}-implementation-plan.md"
+        approval_required: true
+        client_action: "Choose implementation approach and approve design"
+
+        process:
+          1_design_options:
+            - "Architect presents 2-3 implementation approaches:"
+            - "  • Option A: [Approach name]"
+            - "    - How it works"
+            - "    - Files/modules to modify"
+            - "    - New components needed"
+            - "    - Pros and cons"
+            - "    - Risk level"
+            - "    - Time estimate"
+            - "  • Option B: [Alternative approach]"
+            - "  • Option C: [Another alternative]"
+
+          2_integration_analysis:
+            - "Show impact on existing codebase:"
+            - "  • Which files need modification"
+            - "  • API changes required"
+            - "  • Database schema changes"
+            - "  • Breaking changes (if any)"
+            - "  • Migration requirements"
+
+          3_implementation_breakdown:
+            - "Break chosen approach into tasks:"
+            - "  • Task 1: [Component A]"
+            - "  • Task 2: [Component B]"
+            - "  • Task 3: [Integration]"
+            - "  • Task 4: [Testing]"
+
+          4_client_decision:
+            - "Present all options to client"
+            - "Answer questions"
+            - "Client chooses approach"
+            - "Document decision rationale"
+
+        success_criteria:
+          - "Implementation approaches presented with tradeoffs"
+          - "Impact on existing code clearly shown"
+          - "Client makes technical decision"
+          - "Implementation plan approved"
+
+        next_phase: "implementation"
+
+  implementation:
+    name: "Implementation & Verification"
+    description: "Build feature according to approved design"
+    autonomy_level: 80  # Mostly autonomous with checkpoints
+
+    active_agents:
+      - project_manager
+      - solution_architect
+      - backend_developer
+      - frontend_developer
+      - ml_engineer  # If needed
+      - devops_engineer  # If needed
+      - qa_automation
+      - qa_manual
+
+    gates:
+      gate_3:
+        name: "Implementation & Quality Verification"
+        owner: "development team + qa team"
+        deliverables:
+          - "Implemented feature code"
+          - "Tests (unit, integration, e2e as needed)"
+          - "Updated documentation"
+          - "docs/features/FEATURE-{ID}-completion-report.md"
+        approval_required: true
+        client_action: "Review completed feature and provide feedback"
+
+        process:
+          1_implement_stories:
+            - "Dev team implements each story:"
+            - "  • Follow approved design"
+            - "  • Integrate with existing codebase"
+            - "  • Write tests alongside code"
+            - "  • Update inline documentation"
+
+          2_story_completion_gates:
+            - "For EACH story, enforce 3-gate quality process:"
+            - "  • Gate 1: Peer code review (different agent)"
+            - "  • Gate 2: QA verification (QA tests feature)"
+            - "  • Gate 3: PM verification (PM spot-checks)"
+            - "See story_lifecycle section for details"
+
+          3_integration_verification:
+            - "Architect verifies:"
+            - "  • Feature integrates cleanly"
+            - "  • Follows approved architecture"
+            - "  • No unexpected changes to other code"
+            - "  • API contracts maintained"
+
+          4_qa_verification:
+            - "QA performs comprehensive testing:"
+            - "  • All acceptance criteria met"
+            - "  • Feature works end-to-end"
+            - "  • No regression in existing features"
+            - "  • Edge cases handled"
+            - "  • Error handling works"
+
+          5_documentation:
+            - "Update project documentation:"
+            - "  • README if needed"
+            - "  • API documentation"
+            - "  • User guides"
+            - "  • Architecture diagrams if changed"
+
+          6_demo_to_client:
+            - "PM presents completed feature"
+            - "Demo all user stories"
+            - "Show tests passing"
+            - "Client provides feedback"
+
+        success_criteria:
+          - "All user stories complete (3-gate verified)"
+          - "All tests passing"
+          - "Feature works end-to-end"
+          - "No regression"
+          - "Documentation updated"
+          - "Client approves feature"
+
+        completion_trigger: "Feature complete and client approved"
+
+# Story Completion Process (same as agile-two-phase)
+story_lifecycle:
+  states:
+    - todo
+    - in_progress
+    - code_review
+    - testing
+    - done
+
+  transitions:
+    to_in_progress:
+      from: "todo"
+      trigger: "Developer starts work"
+      required: "PM assigns story"
+
+    to_code_review:
+      from: "in_progress"
+      trigger: "Developer claims complete"
+      required:
+        - "Code committed"
+        - "Tests written"
+        - "Build passes"
+      action: "PM assigns different agent as reviewer"
+
+    to_testing:
+      from: "code_review"
+      trigger: "Code reviewer approves"
+      required:
+        - "Reviewer verified code (no stubs)"
+        - "Reviewer ran tests"
+        - "Review documented"
+      action: "PM assigns QA for verification"
+
+    to_done:
+      from: "testing"
+      trigger: "QA verifies acceptance criteria"
+      required:
+        - "QA ran tests"
+        - "QA verified feature works"
+        - "PM spot-checked code"
+        - "No stubs/placeholders"
+      action: "PM updates status"
+
+  rejection_paths:
+    code_review_rejects:
+      from: "code_review"
+      to: "in_progress"
+      reason: "Stubs found, tests failing, criteria not met"
+
+    testing_rejects:
+      from: "testing"
+      to: "in_progress"
+      reason: "Tests failing or feature doesn't work"
+
+# Quality Gates for Story Completion
+story_completion_gates:
+  gate_review:
+    name: "Peer Code Review"
+    owner: "Different agent"
+    mandatory: true
+    checklist:
+      - "Read actual code files"
+      - "Verify no stubs"
+      - "Run tests"
+      - "Check acceptance criteria"
+      - "Verify build succeeds"
+
+  gate_qa:
+    name: "QA Verification"
+    owner: "qa_automation OR qa_manual"
+    mandatory: true
+    checklist:
+      - "Run all tests"
+      - "Manually test feature"
+      - "Verify Definition of Done"
+      - "Check no regression"
+
+  gate_pm_verification:
+    name: "PM Final Verification"
+    owner: "project_manager"
+    mandatory: true
+    checklist:
+      - "Read review reports"
+      - "Spot-check code"
+      - "Run build and tests"
+      - "Update status.yaml"
+
+# Feature Workflow Rules
+rules:
+  scope_control:
+    - "Stay within approved feature scope"
+    - "No additional features without client approval"
+    - "Follow approved technical design"
+
+  quality:
+    - "3-gate story completion mandatory"
+    - "All tests must pass"
+    - "No stub implementations"
+    - "Code review required for each story"
+
+  communication:
+    - "PM provides progress updates at milestones"
+    - "Escalate blockers immediately"
+    - "Ask for clarification if requirements unclear"
+
+# Agent Responsibilities
+agent_behaviors:
+  project_manager:
+    - "Coordinate all agents"
+    - "Track progress on stories"
+    - "Provide client updates"
+    - "Enforce quality gates"
+    - "Demo completed feature"
+
+  product_owner:
+    - "Facilitate feature discussion"
+    - "Create user stories"
+    - "Define acceptance criteria"
+    - "Clarify requirements"
+
+  solution_architect:
+    - "Deep codebase analysis"
+    - "Present implementation options"
+    - "NEVER decide - client chooses"
+    - "Verify integration quality"
+    - "Review code for architecture compliance"
+
+  developers:
+    - "Implement stories per approved design"
+    - "Write tests"
+    - "Follow existing code patterns"
+    - "Request review when done"
+    - "Collaborate through PM"
+
+  qa_team:
+    - "Review all stories (peer review)"
+    - "Run comprehensive tests"
+    - "Verify acceptance criteria"
+    - "Check for regression"
+    - "Reject incomplete work"
+
+# Expected Timeline
+timeline:
+  gate_1: "1-3 hours (scoping & codebase analysis)"
+  gate_2: "1-3 hours (design & options)"
+  gate_3: "Hours to days (depending on complexity)"
+  total: "Typically 1-5 days for medium feature"
+
+# Escalation Triggers
+escalations:
+  - condition: "Feature requires major architecture change"
+    action: "Escalate to client - may need project workflow"
+
+  - condition: "Scope creep detected"
+    action: "Present additional scope to client for approval"
+
+  - condition: "Critical blocker encountered"
+    action: "Escalate to client immediately"
+
+  - condition: "Discovered breaking change required"
+    action: "Present tradeoffs to client for decision"

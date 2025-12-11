@@ -1,0 +1,67 @@
+# Agent Configuration
+# Defines which agents are available and their activation phases
+
+agents:
+  project_manager:
+    enabled: true
+    phases:
+      - design
+      - execution
+    description: "Coordinates all activities, presents proposals, manages sprints"
+
+  product_owner:
+    enabled: true
+    phases:
+      - design
+      - execution
+    description: "Creates PSA, epics, stories, and acceptance criteria"
+
+  solution_architect:
+    enabled: true
+    phases:
+      - design
+      - execution
+    description: "Presents architecture options, enforces approved decisions"
+
+  backend_developer:
+    enabled: true
+    phases:
+      - execution
+    description: "Develops backend services and APIs"
+
+  frontend_developer:
+    enabled: true
+    phases:
+      - execution
+    description: "Develops user interfaces and frontend features"
+
+  ml_engineer:
+    enabled: true
+    phases:
+      - execution
+    description: "Develops ML models and data pipelines"
+
+  devops_engineer:
+    enabled: true
+    phases:
+      - execution
+    description: "Sets up CI/CD, infrastructure, and deployment"
+
+  qa_automation:
+    enabled: true
+    phases:
+      - execution
+    description: "Writes automated tests and test frameworks"
+
+  qa_manual:
+    enabled: true
+    phases:
+      - execution
+    description: "Performs manual testing and creates test cases"
+
+  security_expert:
+    enabled: true
+    phases:
+      - design
+      - execution
+    description: "Security specialist for threat modeling, vulnerability assessment, and security testing"

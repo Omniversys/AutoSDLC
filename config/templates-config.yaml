@@ -1,0 +1,55 @@
+# Template Configuration
+# Maps document types to their templates
+
+templates:
+  documents:
+    psa:
+      template: "templates/comprehensive/PSA.template.md"
+      output_path: "docs/PSA.md"
+      type: "living"  # Updated throughout project
+
+    epic:
+      template: "templates/comprehensive/epic.template.md"
+      output_path: "docs/epics/"
+      naming: "EPIC-{number}.md"
+      type: "versioned"
+
+    story:
+      template: "templates/comprehensive/story.template.md"
+      output_path: "docs/stories/"
+      naming: "STORY-{number}.md"
+      type: "versioned"
+
+    task:
+      template: "templates/comprehensive/task.template.md"
+      output_path: "docs/tasks/"
+      naming: "TASK-{number}.md"
+      type: "versioned"
+
+  architecture:
+    proposal:
+      template: "templates/comprehensive/proposal.template.md"
+      output_path: "architecture/proposal.md"
+      type: "phase1_only"
+
+    approved:
+      template: "templates/architecture/approved.template.md"
+      output_path: "architecture/approved-architecture.md"
+      type: "locked_after_gate3"
+
+    adr:
+      template: "templates/comprehensive/adr.template.md"
+      output_path: "architecture/decisions/"
+      naming: "ADR-{number}-{slug}.md"
+      type: "append_only"
+
+  status:
+    current:
+      template: "templates/status/current-status.template.yaml"
+      output_path: "status/current-status.yaml"
+      type: "living"
+
+    sprint_plan:
+      template: "templates/status/sprint-plan.template.md"
+      output_path: "status/sprint-plan.md"
+      type: "versioned"

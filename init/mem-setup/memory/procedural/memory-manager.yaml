@@ -1,0 +1,287 @@
+# Memory Management System Configuration
+# Controls how long-term memory works in AutoSDLC
+
+memory_system:
+  version: "1.0"
+  enabled: true
+  
+  # Memory Types
+  
+  semantic_memory:
+    description: "Shared facts and knowledge about the project"
+    location: ".AutoSDLC/memory/semantic/"
+    access: "all_agents"
+    update_frequency: "on_decision_or_fact_change"
+    retention: "permanent"
+    
+    files:
+      knowledge_base:
+        path: "knowledge-base.md"
+        max_size_kb: 50
+        purpose: "Architecture decisions, project facts, domain knowledge, API contracts"
+        update_triggers:
+          - "gate_transition"
+          - "architecture_decision_approved"
+          - "api_contract_finalized"
+          - "business_rule_defined"
+      
+      glossary:
+        path: "glossary.md"
+        max_size_kb: 10
+        purpose: "Domain terminology and technical abbreviations"
+        update_triggers:
+          - "new_term_introduced"
+          - "terminology_confusion_detected"
+    
+    maintenance:
+      - "Never delete approved decisions"
+      - "Update facts when superseded (mark old as deprecated)"
+      - "Split into sub-files if > 50KB"
+      - "Keep most-accessed information at top"
+  
+  episodic_memory:
+    description: "Agent-specific experiences and learnings"
+    location: ".AutoSDLC/memory/episodic/"
+    access: "per_agent_plus_pm"
+    update_frequency: "per_session_or_significant_event"
+    retention: "last_20_sessions"
+    
+    files:
+      - "pm.md"
+      - "solution-architect.md"
+      - "backend-developer.md"
+      - "frontend-developer.md"
+      - "ml-engineer.md"
+      - "devops.md"
+      - "qa-automation.md"
+      - "qa-manual.md"
+      - "security-expert.md"
+    
+    structure:
+      - "Recent experiences (last 10 sessions with date)"
+      - "User interaction patterns"
+      - "Recurring requests/feedback"
+      - "Performance learnings"
+      - "Collaboration notes with other agents"
+    
+    update_triggers:
+      - "session_end"
+      - "user_feedback_received"
+      - "significant_learning_occurred"
+      - "collaboration_completed"
+      - "blocker_resolved"
+    
+    maintenance:
+      - "Keep last 10 sessions in main file"
+      - "Archive sessions 11-20 to episodic-archive/"
+      - "Compress archives (remove redundancy)"
+      - "Delete sessions > 20 (unless significant)"
+  
+  procedural_memory:
+    description: "Skills, procedures, and how-to knowledge"
+    location: ".AutoSDLC/memory/procedural/"
+    access: "all_agents"
+    update_frequency: "on_pattern_recognition"
+    retention: "permanent_with_versioning"
+    
+    files:
+      agent_skills:
+        path: "agent-skills.yaml"
+        purpose: "Learned procedures for each agent type"
+        sections:
+          - "agent-specific procedures"
+          - "collaboration patterns"
+          - "workflow patterns"
+      
+      user_preferences:
+        path: "user-preferences.yaml"
+        purpose: "How this specific user likes to work"
+        sections:
+          - "code style preferences"
+          - "communication preferences"
+          - "work patterns"
+          - "quality standards"
+    
+    update_triggers:
+      - "new_effective_procedure_discovered"
+      - "user_preference_identified"
+      - "workflow_optimization_found"
+      - "repeated_pattern_recognized"
+    
+    maintenance:
+      - "Version significant changes"
+      - "Merge duplicate procedures"
+      - "Update procedures when better patterns found"
+      - "Keep historical versions for reference"
+
+# Memory Access Patterns
+
+access_patterns:
+  
+  on_agent_activation:
+    description: "When an agent becomes the active agent"
+    load_order:
+      1: ".AutoSDLC/copilot-state.md"  # Where am I now?
+      2: ".AutoSDLC/memory/semantic/knowledge-base.md"  # What are the facts?
+      3: ".AutoSDLC/memory/episodic/{agent-id}.md"  # What's my history?
+      4: ".AutoSDLC/memory/procedural/user-preferences.yaml"  # How does user like to work?
+      5: ".AutoSDLC/memory/procedural/agent-skills.yaml"  # How do I do my job?
+    
+    when_to_skip:
+      - "Skip semantic if no architecture decisions made yet"
+      - "Skip episodic if first session for this agent"
+  
+  on_collaboration:
+    description: "When two agents work together"
+    load_in_addition:
+      - ".AutoSDLC/memory/episodic/{other-agent-id}.md"
+      - "collaboration_patterns from procedural/agent-skills.yaml"
+  
+  on_gate_transition:
+    description: "When moving to a new gate"
+    actions:
+      - "Update semantic/knowledge-base.md with gate decisions"
+      - "Update all active agents' episodic memories"
+      - "Archive previous gate context if needed"
+  
+  on_session_start:
+    description: "Start of new conversation (any agent)"
+    load_order:
+      1: ".AutoSDLC/copilot-state.md"
+      2: ".AutoSDLC/action-plan.md"
+      3: ".AutoSDLC/memory/semantic/knowledge-base.md"
+      4: ".AutoSDLC/memory/episodic/{current-agent}.md"
+    
+    greeting_format: |
+      "Resuming work as {agent_role}. 
+      Last session: {last_action}.
+      Current task: {current_task}.
+      Ready to continue."
+  
+  on_session_end:
+    description: "End of conversation"
+    update:
+      - ".AutoSDLC/copilot-state.md - mandatory"
+      - ".AutoSDLC/action-plan.md - mandatory"
+      - ".AutoSDLC/memory/episodic/{agent-id}.md - mandatory"
+      - ".AutoSDLC/memory/semantic/knowledge-base.md - if decisions made"
+      - ".AutoSDLC/memory/procedural/agent-skills.yaml - if new patterns learned"
+
+# Memory Sharing Rules
+
+sharing_rules:
+  
+  semantic_memory:
+    visible_to: "all_agents"
+    editable_by: "all_agents"
+    rationale: "Single source of truth for project facts"
+    conflict_resolution: "User decides if agents disagree"
+  
+  episodic_memory:
+    visible_to: "agent_self + pm"
+    editable_by: "agent_self_only"
+    rationale: "Personal experiences belong to the agent"
+    exceptions:
+      - "PM can read all episodic memories for coordination"
+      - "Agents can request to read another's memory during collaboration"
+  
+  procedural_memory:
+    visible_to: "all_agents"
+    editable_by: "all_agents"
+    rationale: "Everyone benefits from shared procedures and preferences"
+    merge_strategy: "Collaborative - discuss if conflicting updates"
+
+# Memory Quality Standards
+
+quality_standards:
+  
+  semantic_memory:
+    - "Facts must be verifiable and sourced"
+    - "Decisions must include rationale"
+    - "Use consistent terminology (reference glossary)"
+    - "Date all entries"
+    - "Mark deprecated information clearly"
+  
+  episodic_memory:
+    - "Include specific dates/session numbers"
+    - "Quote user feedback directly when recording"
+    - "Separate facts from interpretations"
+    - "Focus on patterns, not every detail"
+    - "Update regularly to stay relevant"
+  
+  procedural_memory:
+    - "Procedures must be actionable (step-by-step)"
+    - "Include rationale for each procedure"
+    - "Note when procedure was learned/refined"
+    - "Keep procedures concise and focused"
+    - "Version significant changes"
+
+# Memory Maintenance Schedule
+
+maintenance:
+  
+  daily:
+    - "Update episodic memory at end of each session"
+    - "Update copilot-state.md and action-plan.md"
+  
+  weekly:
+    - "Review episodic memories for patterns to extract to procedural"
+    - "Check semantic memory for outdated information"
+  
+  per_gate:
+    - "Archive completed gate context"
+    - "Update semantic memory with gate decisions"
+    - "Consolidate episodic learnings"
+  
+  per_sprint:
+    - "Compress old episodic sessions"
+    - "Update procedural memory with sprint learnings"
+    - "Review and optimize memory file sizes"
+
+# Integration with Short-Term Memory
+
+short_term_integration:
+  
+  relationship:
+    - "Short-term (copilot-state.md, action-plan.md) = working memory"
+    - "Long-term (memory/) = persistent knowledge and experience"
+    - "Short-term gets rewritten frequently"
+    - "Long-term accumulates and archives"
+  
+  flow:
+    - "Short-term → Long-term: At session end, significant learnings move to episodic"
+    - "Long-term → Short-term: At session start, context loaded from semantic/episodic"
+  
+  optimization:
+    - "Short-term: ~1000 words total (fits in context)"
+    - "Long-term: Load on-demand, ~10-50KB per file"
+    - "Only load long-term memory sections that are needed"
+
+# Tool Compatibility
+
+tool_compatibility:
+  github_copilot:
+    loading: "Explicit - user must prompt or use @workspace"
+    format: "Markdown preferred for better display"
+    optimization: "Keep files compact, use clear headings"
+  
+  claude_code:
+    loading: "Automatic via ORCHESTRATOR.md instructions"
+    format: "Markdown or YAML both work well"
+    optimization: "Can handle larger files, more detail"
+  
+  cursor:
+    loading: "Automatic via .cursorrules"
+    format: "Markdown or YAML both work well"
+    optimization: "Similar to Claude"
+  
+  universal_principles:
+    - "All memory files are plain text (MD/YAML)"
+    - "No tool-specific formats"
+    - "Clear structure and headers"
+    - "Self-documenting with comments"
+
+---
+# This configuration file defines HOW the memory system operates
+# It's read by all AI assistants to understand memory management
+# Last Updated: {LAST_UPDATE_DATE}

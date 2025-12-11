@@ -1,0 +1,139 @@
+# Documentation Modes Configuration
+# Defines how different workflows handle documentation
+
+modes:
+  minimal:
+    name: "Minimal Documentation"
+    description: "Lightweight documentation for quick tasks (bugs, hotfixes)"
+    workflows: ["bug-fix"]
+
+    token_budget:
+      target: 5500
+      templates: 500
+      session_context: 380
+      quality_reports: 800
+
+    characteristics:
+      - "Single document per task"
+      - "Inline quality reports"
+      - "Compact session context"
+      - "Gate-only updates"
+      - "No epic/PSA structure"
+
+    skip_templates:
+      - "PSA.template.md"
+      - "epic.template.md"
+      - "story.template.md"
+      - "task.template.md"
+      - "adr.template.md"
+      - "proposal.template.md"
+
+    directory_structure:
+      required:
+        - ".devflow/"
+        - "docs/bug-fixes/"
+      optional: []
+      skip:
+        - "docs/epics/"
+        - "docs/stories/"
+        - "docs/tasks/"
+        - "architecture/"
+
+  moderate:
+    name: "Moderate Documentation"
+    description: "Balanced documentation for features and refactors"
+    workflows: ["feature-development", "refactor"]
+
+    token_budget:
+      target: 15000
+      templates: 1500
+      session_context: 1000
+      quality_reports: 1800
+
+    characteristics:
+      - "Feature brief instead of PSA"
+      - "Stories without epics"
+      - "Lightweight session context"
+      - "Checkpoint updates"
+      - "Per-story quality reports"
+
+    skip_templates:
+      - "PSA.template.md"
+      - "epic.template.md"
+      - "task.template.md"
+
+    directory_structure:
+      required:
+        - ".devflow/"
+        - "docs/features/"
+        - "docs/stories/"
+      optional:
+        - "architecture/features/"
+      skip:
+        - "docs/epics/"
+
+  comprehensive:
+    name: "Comprehensive Documentation"
+    description: "Full documentation for new projects and complex initiatives"
+    workflows: ["agile-two-phase"]
+
+    token_budget:
+      target: 80000
+      templates: 5000
+      session_context: 3000
+      quality_reports: 4000
+
+    characteristics:
+      - "Full PSA with epics"
+      - "Detailed architecture docs"
+      - "Comprehensive session context"
+      - "Continuous updates"
+      - "Full quality tracking"
+
+    skip_templates: []
+
+    directory_structure:
+      required:
+        - ".devflow/"
+        - ".devflow/quality-reports/"
+        - "docs/epics/"
+        - "docs/stories/"
+        - "docs/tasks/"
+        - "architecture/decisions/"
+        - "architecture/proposals/"
+      optional:
+        - "docs/features/"
+
+# Update frequency settings
+update_frequencies:
+  gate_only:
+    description: "Update session context only at gate transitions"
+    typical_updates_per_workflow: 2-4
+    best_for: ["minimal"]
+
+  checkpoint:
+    description: "Update at story completion and gates"
+    typical_updates_per_workflow: 5-10
+    best_for: ["moderate"]
+
+  action:
+    description: "Update after every significant action"
+    typical_updates_per_workflow: 20-50
+    best_for: ["comprehensive"]
+
+# Template loading strategies
+template_loading:
+  minimal:
+    strategy: "explicit_list"
+    load_from: "templates/minimal/"
+    fallback: false
+
+  moderate:
+    strategy: "explicit_list"
+    load_from: "templates/moderate/"
+    fallback: "templates/comprehensive/"
+
+  comprehensive:
+    strategy: "load_all"
+    load_from: "templates/comprehensive/"
+    fallback: null

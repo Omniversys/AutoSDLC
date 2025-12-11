@@ -1,0 +1,389 @@
+# Hot-Fix Workflow
+# Ultra-fast emergency workflow for critical production issues
+# Focus: Rapid response, minimal gates, post-fix review
+
+workflow_name: "hotfix"
+version: "1.0"
+description: "Emergency workflow for critical production issues requiring immediate response"
+
+# Documentation Configuration (Ultra-Minimal)
+documentation:
+  mode: "ultra-minimal"
+
+  templates:
+    directory: "templates/hotfix/"
+    load_only:
+      - "incident-report.template.md"
+      - "hotfix-verification.template.md"
+    skip_all_others: true
+
+  session_context:
+    format: "compact"
+    template: "templates/session-context/compact.template.md"
+    update_frequency: "gate_only"
+    max_words: 150
+
+  directory_structure:
+    create:
+      - ".AutoSDLC/"
+      - "docs/incidents/"
+    skip:
+      - "docs/epics/"
+      - "docs/stories/"
+      - "docs/tasks/"
+      - "docs/features/"
+      - "architecture/"
+
+  quality_reports:
+    type: "inline"
+    location: "in_incident_report"
+
+# Emergency Timeline
+expected_timeline:
+  total: "30-120 minutes for critical issues"
+  gate_1: "15-30 minutes (rapid analysis)"
+  gate_2: "15-60 minutes (implement & verify)"
+  gate_3: "Post-fix review (within 24 hours)"
+
+# Single phase: Emergency Response
+phases:
+  emergency:
+    name: "Emergency Response"
+    description: "Rapid response to critical production issue"
+    autonomy_level: 70  # Higher autonomy for speed, but with safeguards
+
+    active_agents:
+      - project_manager
+      - solution_architect
+      - backend_developer  # or frontend_developer based on issue
+      - devops_engineer
+      - qa_automation
+      - security_expert  # If security-related
+
+    gates:
+      gate_1:
+        name: "Rapid Impact Assessment & Fix Strategy"
+        owner: "solution_architect + relevant developer"
+        deliverables:
+          - "docs/incidents/HOTFIX-{ID}-incident.md"
+        approval_required: true
+        client_action: "Approve fix approach (FAST - within 15 min)"
+
+        critical_questions:
+          - "What is the production impact? (users affected, data at risk, revenue impact)"
+          - "What is the root cause? (best current understanding)"
+          - "What is the fastest safe fix?"
+          - "What are the risks of this fix?"
+          - "Do we need to rollback first, then fix?"
+
+        process:
+          1_assess_impact:
+            - "Architect analyzes production issue RAPIDLY:"
+            - "  • Severity: P0 (critical), P1 (high), P2 (medium)"
+            - "  • Scope: How many users/systems affected?"
+            - "  • Data risk: Is data at risk or corrupted?"
+            - "  • Revenue impact: Is business revenue affected?"
+            - "  • Time sensitivity: Can this wait or must fix NOW?"
+
+          2_identify_cause:
+            - "Rapid root cause analysis (time-boxed to 10-15 min):"
+            - "  • Review recent deployments/changes"
+            - "  • Check logs and monitoring"
+            - "  • Identify likely culprit code/config"
+            - "  • Note: Perfect understanding not required, identify most likely cause"
+
+          3_fix_options:
+            - "Architect presents 1-3 options (FAST):"
+            - "  • Option A: ROLLBACK (safest, fastest)"
+            - "    - Rollback to last known good version"
+            - "    - Pros: Immediate fix, no new code risk"
+            - "    - Cons: Loses recent features"
+            - "    - Time: 5-15 minutes"
+            - ""
+            - "  • Option B: HOTFIX (targeted fix)"
+            - "    - Minimal code change to fix issue"
+            - "    - Pros: Keeps recent features"
+            - "    - Cons: Requires code change and testing"
+            - "    - Time: 30-60 minutes"
+            - ""
+            - "  • Option C: WORKAROUND (temporary)"
+            - "    - Configuration change or manual intervention"
+            - "    - Pros: No code deployment"
+            - "    - Cons: May not fully resolve, needs follow-up"
+            - "    - Time: 10-20 minutes"
+
+          4_risk_assessment:
+            - "For chosen approach, assess risks:"
+            - "  • What could go wrong with this fix?"
+            - "  • Do we have a rollback plan?"
+            - "  • Are there cascading impacts?"
+            - "  • Security implications?"
+
+          5_get_approval:
+            - "Present to client/stakeholder:"
+            - "  • Current impact and severity"
+            - "  • Root cause (best understanding)"
+            - "  • Recommended fix with pros/cons"
+            - "  • Timeline to resolution"
+            - "  • Get GO/NO-GO approval"
+
+        success_criteria:
+          - "Severity and impact clearly understood"
+          - "Root cause identified (or strong hypothesis)"
+          - "Fix approach approved by stakeholder"
+          - "Risks documented and accepted"
+          - "Timeline communicated"
+
+        escalation:
+          - condition: "If severity is P0 and unclear how to fix"
+            action: "Escalate to senior architect/CTO for guidance"
+
+          - condition: "If fix requires significant architecture change"
+            action: "Consider workaround for now, proper fix in follow-up"
+
+          - condition: "If data corruption detected"
+            action: "Escalate to data team, may need restore from backup"
+
+        next_gate: "gate_2"
+
+      gate_2:
+        name: "Rapid Implementation & Verification"
+        owner: "developer + qa + devops"
+        deliverables:
+          - "Hotfix code/configuration"
+          - "Verification test results"
+          - "docs/incidents/HOTFIX-{ID}-verification.md"
+        approval_required: true
+        client_action: "Approve deployment to production (after verification)"
+
+        process:
+          1_implement_fix:
+            - "Developer implements MINIMAL fix:"
+            - "  • Make smallest possible change"
+            - "  • No feature additions, no refactoring"
+            - "  • Surgical precision only"
+            - "  • Add logging if helpful for verification"
+
+          2_emergency_testing:
+            - "QA performs rapid verification:"
+            - "  • Reproduce original issue (should still fail)"
+            - "  • Apply fix"
+            - "  • Verify issue is resolved"
+            - "  • Smoke test critical paths"
+            - "  • Run existing automated tests if time permits"
+            - "  • Time-boxed: 15-20 minutes max"
+
+          3_security_check:
+            - "If security-related, Security Expert reviews:"
+            - "  • Does fix introduce new vulnerabilities?"
+            - "  • Are there security implications?"
+            - "  • Is this a security incident requiring notification?"
+            - "  • Time-boxed: 5-10 minutes"
+
+          4_deployment_prep:
+            - "DevOps prepares emergency deployment:"
+            - "  • Prepare rollback procedure"
+            - "  • Set up enhanced monitoring"
+            - "  • Prepare communication for users if needed"
+            - "  • Stage deployment to canary if possible"
+
+          5_deploy_and_monitor:
+            - "Deploy to production:"
+            - "  • Deploy to canary first if infrastructure supports"
+            - "  • Monitor metrics closely for 10-15 minutes"
+            - "  • Verify issue is resolved in production"
+            - "  • Roll forward to all if successful"
+            - "  • ROLLBACK immediately if issues detected"
+
+        success_criteria:
+          - "Issue reproduced and fix verified locally"
+          - "No new issues introduced (smoke tests pass)"
+          - "Security implications assessed"
+          - "Deployed to production successfully"
+          - "Production monitoring confirms resolution"
+          - "No rollback needed"
+
+        emergency_procedures:
+          rollback_triggers:
+            - "Fix causes new errors or issues"
+            - "Performance degrades significantly"
+            - "User complaints increase"
+            - "Monitoring shows unhealthy metrics"
+            - "Security concern identified"
+
+          rollback_process:
+            - "Immediate rollback to previous version"
+            - "Notify all stakeholders"
+            - "Re-assess fix approach"
+            - "Consider alternative options"
+
+        next_gate: "gate_3"
+
+      gate_3:
+        name: "Post-Fix Review & Documentation"
+        owner: "project_manager + team"
+        deliverables:
+          - "docs/incidents/HOTFIX-{ID}-postmortem.md"
+          - "Proper fix story created for backlog"
+        approval_required: false
+        client_action: "Review postmortem and improvement plan"
+        timing: "Within 24 hours of hotfix deployment"
+
+        purpose: "Learn from incident and prevent recurrence"
+
+        process:
+          1_postmortem:
+            - "Blameless postmortem meeting:"
+            - "  • What happened? (timeline of events)"
+            - "  • What was the root cause?"
+            - "  • Why didn't we catch this before production?"
+            - "  • What did we do well in response?"
+            - "  • What could we improve?"
+
+          2_action_items:
+            - "Create actionable improvements:"
+            - "  • Better monitoring/alerting"
+            - "  • Additional tests to prevent recurrence"
+            - "  • Process improvements"
+            - "  • Code quality improvements"
+            - "  • Create stories for each action item"
+
+          3_proper_fix:
+            - "If hotfix was a workaround, create story for proper fix:"
+            - "  • Proper implementation with full testing"
+            - "  • Address root cause completely"
+            - "  • Add regression tests"
+            - "  • Schedule in next sprint"
+
+          4_documentation:
+            - "Update documentation:"
+            - "  • Known issues list"
+            - "  • Incident runbooks"
+            - "  • Monitoring playbooks"
+            - "  • Share learnings with team"
+
+        deliverables_required:
+          - "Postmortem document with timeline"
+          - "Root cause analysis"
+          - "Action items with owners"
+          - "Proper fix story created"
+          - "Documentation updated"
+
+        success_criteria:
+          - "Team understands what happened and why"
+          - "Prevention measures identified"
+          - "Follow-up work scheduled"
+          - "Knowledge shared across team"
+
+        completion_trigger: "Postmortem complete and action items created"
+
+# Hotfix-Specific Rules
+rules:
+  emergency_override:
+    - "Normal gates can be bypassed ONLY for P0 critical issues"
+    - "All bypasses must be documented with justification"
+    - "Post-fix review (Gate 3) is MANDATORY even if other gates bypassed"
+
+  code_changes:
+    - "MINIMAL changes only - fix the immediate issue"
+    - "NO refactoring during hotfix"
+    - "NO feature additions during hotfix"
+    - "NO 'while we're here' changes"
+
+  testing:
+    - "Test the specific issue being fixed"
+    - "Smoke test critical user paths"
+    - "Run existing automated tests if time permits"
+    - "Full test suite runs AFTER deployment"
+
+  communication:
+    - "PM communicates status every 30 minutes to stakeholders"
+    - "When resolved, notify all affected parties"
+    - "Share postmortem findings with broader team"
+
+  security:
+    - "If security-related, Security Expert MUST review before deploy"
+    - "Security incidents require separate incident response"
+    - "Security vulnerabilities may require customer notification"
+
+# Severity Definitions
+severity_levels:
+  p0_critical:
+    definition: "Complete service outage or critical security vulnerability"
+    examples:
+      - "Application completely down"
+      - "Data breach or active security incident"
+      - "Payment processing completely broken"
+      - "Data corruption affecting multiple users"
+    response_time: "Immediate (< 15 min)"
+    communication: "Hourly updates to stakeholders"
+
+  p1_high:
+    definition: "Major functionality broken affecting many users"
+    examples:
+      - "Login broken for subset of users"
+      - "Critical feature non-functional"
+      - "Significant performance degradation"
+    response_time: "< 1 hour"
+    communication: "Updates every 2 hours"
+
+  p2_medium:
+    definition: "Important functionality impaired but workarounds exist"
+    examples:
+      - "Non-critical feature broken"
+      - "Minor performance issues"
+      - "UI issues affecting usability"
+    response_time: "< 4 hours"
+    note: "Consider using bug-fix workflow instead of hotfix"
+
+# Agent Responsibilities
+agent_behaviors:
+  project_manager:
+    - "Coordinate emergency response"
+    - "Communicate with stakeholders frequently"
+    - "Make go/no-go decisions with input"
+    - "Ensure post-fix review happens"
+    - "No coding - delegate ALL technical work"
+
+  solution_architect:
+    - "Rapid root cause analysis"
+    - "Present fix options with pros/cons/risks"
+    - "Make architectural decisions quickly"
+    - "Assess blast radius of fix"
+
+  developers:
+    - "Implement minimal surgical fix"
+    - "No scope creep - fix ONLY the issue"
+    - "Collaborate with QA on verification"
+
+  devops_engineer:
+    - "Prepare emergency deployment"
+    - "Ensure rollback capability"
+    - "Enhanced monitoring during fix"
+    - "Execute deployment carefully"
+
+  qa_automation:
+    - "Rapid verification of fix"
+    - "Smoke testing of critical paths"
+    - "Time-boxed testing (15-20 min max)"
+
+  security_expert:
+    - "Review if security-related"
+    - "Assess security implications of fix"
+    - "Determine if incident notification required"
+
+# Expected Timeline
+timeline:
+  gate_1: "15-30 minutes (analysis & approval)"
+  gate_2: "15-60 minutes (fix & deploy)"
+  gate_3: "Within 24 hours (postmortem)"
+  total: "30-120 minutes to resolution"
+
+# Success Metrics
+success_criteria:
+  - "Production issue resolved"
+  - "No new issues introduced"
+  - "Rollback not needed"
+  - "Postmortem completed"
+  - "Prevention measures identified"
+  - "Team learned from incident"

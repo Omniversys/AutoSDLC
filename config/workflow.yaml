@@ -1,0 +1,78 @@
+# Workflow Configuration
+# Defines available workflows and settings
+
+# Available Workflows
+workflows:
+  hotfix:
+    name: "Hot-Fix"
+    path: "workflows/hotfix-workflow.yaml"
+    description: "Emergency workflow for critical production issues"
+    emoji: "🚨"
+    use_cases:
+      - "Production outages"
+      - "Critical security vulnerabilities"
+      - "Data corruption issues"
+      - "Payment processing failures"
+    timeline: "30-120 minutes"
+    gates: 3
+    autonomy: 70
+    is_emergency: true
+
+  bug-fix:
+    name: "Bug Fix"
+    path: "workflows/bug-fix-workflow.yaml"
+    description: "Fast-track workflow for bug fixes"
+    emoji: "🐛"
+    use_when: "Fixing bugs, resolving issues, patching problems"
+    timeline: "45-90 minutes"
+    gates: 2
+
+  refactor:
+    name: "Refactor"
+    path: "workflows/refactor-workflow.yaml"
+    description: "Code quality improvement without behavior changes"
+    emoji: "🔄"
+    use_when: "Improving code structure, reducing tech debt, maintainability"
+    timeline: "2 hours - 3 days"
+    gates: 3
+
+  feature-development:
+    name: "Feature Development"
+    path: "workflows/feature-workflow.yaml"
+    description: "Balanced workflow for feature development"
+    emoji: "✨"
+    use_when: "Adding features to existing projects"
+    timeline: "1-5 days"
+    gates: 3
+
+  agile-two-phase:
+    name: "New Project"
+    path: "workflows/agile-two-phase.yaml"
+    description: "Full workflow with architecture planning"
+    emoji: "🚀"
+    use_when: "Starting new projects, major system builds"
+    timeline: "Weeks to months"
+    gates: 4
+
+# Default workflow (used if not specified)
+default_workflow: "agile-two-phase"
+
+# Global Settings (apply to all workflows)
+settings:
+  # Default client involvement level
+  client_involvement: "high"  # high, medium, low
+
+  # Require explicit approval for phase/gate transitions
+  require_gate_approval: true
+
+  # Allow agents to ask clarifying questions
+  allow_clarifications: true
+
+  # Sprint duration (for execution phases)
+  sprint_duration_days: 14
+
+  # Task classification on first run
+  task_classification_enabled: true
+
+  # Allow workflow switching mid-project (with approval)
+  allow_workflow_switching: true
