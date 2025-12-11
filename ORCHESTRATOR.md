@@ -50,8 +50,80 @@ AutoSDLC includes a long-term memory system that persists across sessions:
 2. Update copilot-state.md or status.yaml
 3. Update semantic memory if decisions were made
 4. Update procedural memory if new patterns learned
+5. If session recording is active, finalize recording file
 
 See `.AutoSDLC/memory/procedural/memory-manager.yaml` for complete memory system documentation.
+
+---
+
+## 📹 Session Recording (Optional - Educational)
+
+AutoSDLC can record sessions for educational purposes and knowledge sharing.
+
+### When User Requests Recording
+
+**If user says:**
+- "Enable session recording"
+- "Start recording"
+- "Record this session"
+
+**AI responds with:**
+```
+✅ Starting session recording
+
+📝 What would you like to record?
+
+[1] 📍 Future messages only
+    └─> Records from this point forward
+    └─> More privacy-conscious
+
+[2] 📚 Full session (include previous)
+    └─> Captures entire conversation from start
+    └─> Complete context for education
+
+Please choose [1] or [2]:
+```
+
+**If user specifies explicitly:**
+- "Enable session recording --future" → Skip prompt, use future only
+- "Enable session recording --full" → Skip prompt, use full session
+
+### Recording Process
+
+1. **Create session file:**
+   - Location: `.AutoSDLC/memory/sessions/YYYY-MM-DD_HH-MM_task-name.md`
+   - Use template: `.AutoSDLC-framework/templates/session-context/session-recording.template.md`
+   - Add header with metadata (date, workflow, agent, recording type)
+
+2. **During session:**
+   - Capture all user messages with timestamps
+   - Capture all agent responses with agent names
+   - Note key decisions, code changes, learnings
+   - Track session metrics (message count, duration)
+
+3. **When user says "stop recording":**
+   - Finalize the recording file
+   - Add session summary and metrics
+   - Confirm save location and stats
+   - Remind user recordings are local/gitignored
+
+### Recording Format
+
+Use the session recording template which includes:
+- Session metadata (date, workflow, agents, duration)
+- Complete transcript with timestamps
+- Key decisions made
+- Code changes (files created/modified/deleted)
+- Learnings and insights
+- Session metrics
+
+### Privacy & Security
+
+**CRITICAL:**
+- Recordings are stored in `.AutoSDLC/memory/sessions/` (gitignored)
+- NEVER commit recordings to repository
+- Recordings are LOCAL ONLY for educational sharing
+- Warn user to review for sensitive info before sharing externally
 
 ---
 
@@ -162,6 +234,10 @@ cp .AutoSDLC-framework/init/mem-setup/memory/episodic/*.md .AutoSDLC/memory/epis
 
 # Copy procedural memory templates
 cp .AutoSDLC-framework/init/mem-setup/memory/procedural/*.yaml .AutoSDLC/memory/procedural/
+
+# Create sessions directory for optional recording
+mkdir -p .AutoSDLC/memory/sessions
+cp .AutoSDLC-framework/init/mem-setup/memory/sessions/README.md .AutoSDLC/memory/sessions/
 ```
 
 Or create them manually following the templates.

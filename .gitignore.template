@@ -1,0 +1,18 @@
+# AutoSDLC - gitignore template
+# This file shows what should be ignored in user projects
+
+# AutoSDLC Framework (installed per-developer)
+.AutoSDLC-framework/
+
+# AutoSDLC Runtime State (generated, developer-specific)
+.AutoSDLC/
+
+# Session recordings (privacy - keep local only)
+.AutoSDLC/memory/sessions/*.md
+!.AutoSDLC/memory/sessions/README.md
+
+# Common development files
+node_modules/
+*.log
+.env
+.DS_Store

@@ -36,6 +36,8 @@ copilot_mode:
     - "gate_transition"
     - "blocker_encountered"
     - "session_end"
+    - "recording_start"
+    - "recording_stop"
     
   # Autonomous Behaviors (what Copilot can do without asking)
   autonomous_actions:
@@ -47,6 +49,7 @@ copilot_mode:
     - "refactor_code"
     - "add_error_handling"
     - "update_state_files"
+    - "capture_session_recording"
     
   # Requires Approval (what Copilot must ask about)
   requires_approval:
@@ -65,6 +68,97 @@ copilot_mode:
     on_tests_pass: "All tests passing. Checking off action plan item..."
     on_continue: "Continuing with next action from plan..."
     on_blocker: "Blocker encountered. Documenting and awaiting guidance..."
+    on_recording_request: "Asking user to choose recording scope (future only or full session)..."
+    on_recording_started: "Session recording enabled. Capturing interactions..."
+    on_recording_stopped: "Session recording stopped. File saved to .AutoSDLC/memory/sessions/"
+
+# Session Recording Configuration
+
+session_recording:
+  enabled: true
+  
+  # Storage
+  storage:
+    directory: ".AutoSDLC/memory/sessions/"
+    template: ".AutoSDLC-framework/templates/session-context/session-recording.template.md"
+    filename_format: "YYYY-MM-DD_HH-MM_task-name.md"
+    
+  # Privacy
+  privacy:
+    gitignored: true
+    local_only: true
+    warn_before_sharing: true
+    
+  # Recording modes
+  modes:
+    future_only:
+      description: "Capture from enable point forward"
+      default: false
+      privacy_level: "high"
+      
+    full_session:
+      description: "Capture entire conversation from start"
+      default: false
+      privacy_level: "medium"
+      requires_explicit_consent: true
+      
+  # User prompts
+  prompts:
+    ask_scope:
+      enabled: true
+      message: |
+        ✅ Starting session recording
+        
+        📝 What would you like to record?
+        
+        [1] 📍 Future messages only
+            └─> Records from this point forward
+            └─> More privacy-conscious
+        
+        [2] 📚 Full session (include previous)
+            └─> Captures entire conversation from start
+            └─> Complete context for education
+        
+        Please choose [1] or [2]:
+    
+    started_future:
+      message: |
+        ✅ Recording enabled (Future only)
+        📝 File: .AutoSDLC/memory/sessions/{filename}
+        ⏹️  To stop: 'stop recording'
+    
+    started_full:
+      message: |
+        ✅ Recording enabled (FULL SESSION)
+        📝 File: .AutoSDLC/memory/sessions/{filename}
+        📍 Recording from: Session start (captured {N} previous messages)
+        ⚠️  Note: All previous messages included
+        ⏹️  To stop: 'stop recording'
+    
+    stopped:
+      message: |
+        ⏹️ Session recording stopped
+        💾 Saved: .AutoSDLC/memory/sessions/{filename}
+        📊 Captured: {N} messages, {N} words
+        ⚠️  Reminder: Review for sensitive info before sharing
+        ✅ Ready to share for educational purposes
+  
+  # Capture settings
+  capture:
+    include_timestamps: true
+    include_agent_names: true
+    capture_code_changes: true
+    capture_decisions: true
+    capture_metrics: true
+    
+  # Content to capture
+  content:
+    - "user_messages"
+    - "agent_responses"
+    - "key_decisions"
+    - "code_changes"
+    - "learnings"
+    - "session_metrics"
 
 # Memory Loading Strategy for Copilot
 

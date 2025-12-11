@@ -35,6 +35,60 @@
 4. Show: "Resuming: [current task] as [current agent]"
 5. Ask: "Should I continue where we left off?"
 
+### When User Requests Session Recording
+**Triggers:** "enable session recording" | "start recording" | "record this session"
+
+**If no flags specified (--future or --full):**
+1. Show recording options prompt:
+   ```
+   ✅ Starting session recording
+   
+   📝 What would you like to record?
+   
+   [1] 📍 Future messages only
+       └─> Records from this point forward
+       └─> More privacy-conscious
+   
+   [2] 📚 Full session (include previous)
+       └─> Captures entire conversation from start
+       └─> Complete context for education
+   
+   Please choose [1] or [2]:
+   ```
+2. Wait for user choice
+3. Create session file: `.AutoSDLC/memory/sessions/YYYY-MM-DD_HH-MM_task-name.md`
+4. Use template: `.AutoSDLC-framework/templates/session-context/session-recording.template.md`
+5. Begin capturing based on user choice
+
+**If --future flag:** Skip prompt, record future only  
+**If --full flag:** Skip prompt, record full session
+
+**Confirmation message:**
+```
+✅ Recording enabled ({FUTURE_ONLY | FULL_SESSION})
+📝 File: .AutoSDLC/memory/sessions/2025-12-11_14-30_task.md
+⏹️  To stop: 'stop recording'
+```
+
+### When User Stops Session Recording
+**Triggers:** "stop recording" | "end recording" | "pause recording"
+
+1. Finalize recording file with:
+   - Session summary
+   - Key decisions
+   - Code changes
+   - Learnings
+   - Metrics (message count, duration, agents used)
+2. Save and close file
+3. Show confirmation:
+   ```
+   ⏹️ Session recording stopped
+   💾 Saved: .AutoSDLC/memory/sessions/2025-12-11_14-30_task.md
+   📊 Captured: {N} messages, {N} words
+   ⚠️  Reminder: Review for sensitive info before sharing
+   ✅ Ready to share for educational purposes
+   ```
+
 ### When Completing a Task
 1. Update copilot-state.md with new current task
 2. Update action-plan.md to next task checklist
