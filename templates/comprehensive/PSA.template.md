@@ -113,6 +113,16 @@
 
 ---
 
+## Risks & Mitigation Strategies
+
+| Risk | Impact | Probability | Mitigation Strategy | Owner |
+|------|--------|-------------|---------------------|-------|
+| {risk_description_1} | {High/Medium/Low} | {High/Medium/Low} | {mitigation_strategy_1} | {owner_1} |
+| {risk_description_2} | {High/Medium/Low} | {High/Medium/Low} | {mitigation_strategy_2} | {owner_2} |
+| {risk_description_3} | {High/Medium/Low} | {High/Medium/Low} | {mitigation_strategy_3} | {owner_3} |
+
+---
+
 ## Approvals
 
 - **Client Approval:** {approval_status}
