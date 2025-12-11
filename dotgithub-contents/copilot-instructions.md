@@ -129,7 +129,7 @@ Read `.AutoSDLC/behavior-triggers.md` for complete trigger rules.
 
 ## 📋 Core AutoSDLC Instructions
 
-**Main Orchestrator**: Read `ORCHESTRATOR.md` for complete workflow instructions
+**Main Orchestrator**: Read `.AutoSDLC-framework/ORCHESTRATOR.md` for complete workflow instructions
 
 ### What AutoSDLC Is
 - A config-driven framework using YAML configs and structured prompts
@@ -138,7 +138,7 @@ Read `.AutoSDLC/behavior-triggers.md` for complete trigger rules.
 - It's a methodology you follow, not code you execute
 
 ### Agent System
-Load agent behaviors from `agents/{agent-id}.yaml` when acting as that agent.
+Load agent behaviors from `.AutoSDLC-framework/agents/{agent-id}.yaml` when acting as that agent.
 
 **Available agents:**
 - `pm.yaml` - Project Manager (coordination)
@@ -218,7 +218,7 @@ User should say: `@workspace Load memory for [topic]` or reference specific memo
 - **Less proactive**: User may need to explicitly say "continue"
 - **Explicit file access**: User may need @workspace command
 
-See `AutoSDLC/config/copilot-adaptations.yaml` for full optimization settings.
+See `.AutoSDLC-framework/config/copilot-adaptations.yaml` for full optimization settings.
 
 ---
 
@@ -257,10 +257,10 @@ END SESSION
 - `.AutoSDLC/memory/` - Long-term memory system
 
 **AutoSDLC Core**:
-- `ORCHESTRATOR.md` - Main instructions
-- `config/` - Workflow and agent configurations
-- `agents/` - Agent behavior definitions
-- `workflows/` - Workflow definitions
+- `.AutoSDLC-framework/ORCHESTRATOR.md` - Main instructions
+- `.AutoSDLC-framework/config/` - Workflow and agent configurations
+- `.AutoSDLC-framework/agents/` - Agent behavior definitions
+- `.AutoSDLC-framework/workflows/` - Workflow definitions
 
 ---
 

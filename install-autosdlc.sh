@@ -60,6 +60,14 @@ case $choice in
         else
             AutoSDLC_REPO="${AutoSDLC_REPO:-https://github.com/Omniversys/AutoSDLC.git}"
             git clone "$AutoSDLC_REPO" .AutoSDLC-framework
+            
+            # Remove non-essential files
+            echo "🧹 Cleaning up non-essential files..."
+            cd .AutoSDLC-framework
+            rm -f CONTRIBUTING.md CODE_OF_CONDUCT.md CHANGELOG.md idea.md
+            rm -f install-autosdlc.sh install-autosdlc.ps1
+            cd ..
+            
             echo "✅ AutoSDLC installed to .AutoSDLC-framework/"
             echo "📦 Source: $AutoSDLC_REPO"
         fi
@@ -76,6 +84,14 @@ case $choice in
         if [ ! -d "$GLOBAL_PATH" ]; then
             mkdir -p "$HOME/.AutoSDLC"
             git clone "$AutoSDLC_REPO" "$GLOBAL_PATH"
+            
+            # Remove non-essential files
+            echo "🧹 Cleaning up non-essential files..."
+            cd "$GLOBAL_PATH"
+            rm -f CONTRIBUTING.md CODE_OF_CONDUCT.md CHANGELOG.md idea.md
+            rm -f install-autosdlc.sh install-autosdlc.ps1
+            cd - > /dev/null
+            
             echo "✅ AutoSDLC installed globally to $GLOBAL_PATH"
             echo "📦 Source: $AutoSDLC_REPO"
         else

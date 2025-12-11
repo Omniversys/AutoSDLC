@@ -63,6 +63,14 @@ switch ($choice) {
         } else {
             $AutoSDLCRepo = if ($env:AutoSDLC_REPO) { $env:AutoSDLC_REPO } else { "https://github.com/Omniversys/AutoSDLC.git" }
             git clone $AutoSDLCRepo .AutoSDLC-framework
+            
+            # Remove non-essential files
+            Write-Host "🧹 Cleaning up non-essential files..." -ForegroundColor Cyan
+            Push-Location .AutoSDLC-framework
+            Remove-Item CONTRIBUTING.md, CODE_OF_CONDUCT.md, CHANGELOG.md, idea.md -ErrorAction SilentlyContinue
+            Remove-Item install-autosdlc.sh, install-autosdlc.ps1 -ErrorAction SilentlyContinue
+            Pop-Location
+            
             Write-Host "✅ AutoSDLC installed to .AutoSDLC-framework\" -ForegroundColor Green
             Write-Host "📦 Source: $AutoSDLCRepo" -ForegroundColor Cyan
         }
@@ -79,6 +87,14 @@ switch ($choice) {
         if (-not (Test-Path $globalPath)) {
             New-Item -ItemType Directory -Path "$env:USERPROFILE\.AutoSDLC" -Force | Out-Null
             git clone $AutoSDLCRepo $globalPath
+            
+            # Remove non-essential files
+            Write-Host "🧹 Cleaning up non-essential files..." -ForegroundColor Cyan
+            Push-Location $globalPath
+            Remove-Item CONTRIBUTING.md, CODE_OF_CONDUCT.md, CHANGELOG.md, idea.md -ErrorAction SilentlyContinue
+            Remove-Item install-autosdlc.sh, install-autosdlc.ps1 -ErrorAction SilentlyContinue
+            Pop-Location
+            
             Write-Host "✅ AutoSDLC installed globally to $globalPath" -ForegroundColor Green
             Write-Host "📦 Source: $AutoSDLCRepo" -ForegroundColor Cyan
         } else {

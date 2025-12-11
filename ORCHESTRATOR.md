@@ -151,17 +151,17 @@ Create `.AutoSDLC/session-context.md` with:
 
 ### Step 4: Initialize Memory System
 
-Create initial memory files from templates in `init/mem-setup/memory/`:
+Create initial memory files from templates in `.AutoSDLC-framework/init/mem-setup/memory/`:
 
 ```bash
 # Copy semantic memory templates
-cp init/mem-setup/memory/semantic/*.md .AutoSDLC/memory/semantic/
+cp .AutoSDLC-framework/init/mem-setup/memory/semantic/*.md .AutoSDLC/memory/semantic/
 
 # Copy episodic memory templates (one per agent)
-cp init/mem-setup/memory/episodic/*.md .AutoSDLC/memory/episodic/
+cp .AutoSDLC-framework/init/mem-setup/memory/episodic/*.md .AutoSDLC/memory/episodic/
 
 # Copy procedural memory templates
-cp init/mem-setup/memory/procedural/*.yaml .AutoSDLC/memory/procedural/
+cp .AutoSDLC-framework/init/mem-setup/memory/procedural/*.yaml .AutoSDLC/memory/procedural/
 ```
 
 Or create them manually following the templates.
@@ -172,10 +172,10 @@ If using GitHub Copilot, also create:
 
 ```bash
 # Copy Copilot state files
-cp init/mem-setup/copilot-state.md .AutoSDLC/
-cp init/mem-setup/action-plan.md .AutoSDLC/
-cp init/mem-setup/context-anchors.md .AutoSDLC/
-cp init/mem-setup/behavior-triggers.md .AutoSDLC/
+cp .AutoSDLC-framework/init/mem-setup/copilot-state.md .AutoSDLC/
+cp .AutoSDLC-framework/init/mem-setup/action-plan.md .AutoSDLC/
+cp .AutoSDLC-framework/init/mem-setup/context-anchors.md .AutoSDLC/
+cp .AutoSDLC-framework/init/mem-setup/behavior-triggers.md .AutoSDLC/
 ```
 
 These provide enhanced state management for GitHub Copilot.
@@ -251,7 +251,7 @@ Please choose [0], [1], [2], [3], or [4], or describe what you need.
   - `current.gate_name: "Rapid Impact Assessment"`
   - `display.emoji: "🚨"`
 - Active agents: project_manager, solution_architect, relevant developer, devops_engineer, qa_automation
-- Load: `AutoSDLC/workflows/hotfix-workflow.yaml`
+- Load: `.AutoSDLC-framework/workflows/hotfix-workflow.yaml`
 - **URGENCY:** Proceed immediately with rapid response
 - Proceed to hotfix workflow
 
@@ -264,7 +264,7 @@ Please choose [0], [1], [2], [3], or [4], or describe what you need.
   - `current.gate_name: "Problem Analysis"`
   - `display.emoji: "🐛"`
 - Active agents: solution_architect, developer, qa_automation
-- Load: `AutoSDLC/workflows/bug-fix-workflow.yaml`
+- Load: `.AutoSDLC-framework/workflows/bug-fix-workflow.yaml`
 - Proceed to bug fix workflow
 
 **If user chooses [2] - Refactor:**
@@ -276,7 +276,7 @@ Please choose [0], [1], [2], [3], or [4], or describe what you need.
   - `current.gate_name: "Code Quality Analysis"`
   - `display.emoji: "🔄"`
 - Active agents: solution_architect, developer, qa_automation, qa_manual
-- Load: `AutoSDLC/workflows/refactor-workflow.yaml`
+- Load: `.AutoSDLC-framework/workflows/refactor-workflow.yaml`
 - Proceed to refactor workflow
 
 **If user chooses [3] - Feature:**
@@ -288,7 +288,7 @@ Please choose [0], [1], [2], [3], or [4], or describe what you need.
   - `current.gate_name: "Feature Brief & Analysis"`
   - `display.emoji: "✨"`
 - Active agents: project_manager, product_owner, solution_architect
-- Load: `AutoSDLC/workflows/feature-workflow.yaml`
+- Load: `.AutoSDLC-framework/workflows/feature-workflow.yaml`
 - Proceed to feature workflow
 
 **If user chooses [4] - New Project:**
@@ -300,7 +300,7 @@ Please choose [0], [1], [2], [3], or [4], or describe what you need.
   - `current.gate_name: "PSA Approval"`
   - `display.emoji: "🚀"`
 - Active agents: project_manager, product_owner, solution_architect
-- Load: `AutoSDLC/workflows/agile-two-phase.yaml`
+- Load: `.AutoSDLC-framework/workflows/agile-two-phase.yaml`
 - Proceed to full project workflow
 
 **If user's description is ambiguous:**
@@ -351,7 +351,7 @@ Read `.AutoSDLC/session-context.md` for:
 
 **If workflow.documentation.session_context.format = "compact":**
 ```
-- Use templates/session-context/compact.template.md
+- Use `.AutoSDLC-framework/templates/session-context/compact.template.md`
 - Max length: 200 words
 - Update frequency: Gate transitions only
 - Sections: Gate status + Next action + Blockers only
@@ -360,7 +360,7 @@ Read `.AutoSDLC/session-context.md` for:
 
 **If workflow.documentation.session_context.format = "moderate":**
 ```
-- Use templates/session-context/moderate.template.md
+- Use `.AutoSDLC-framework/templates/session-context/moderate.template.md`
 - Max length: 500 words
 - Update frequency: Checkpoints (story completion + gates)
 - Sections: Progress + Decisions + Next steps
@@ -369,7 +369,7 @@ Read `.AutoSDLC/session-context.md` for:
 
 **If workflow.documentation.session_context.format = "comprehensive":**
 ```
-- Use templates/session-context/comprehensive.template.md
+- Use `.AutoSDLC-framework/templates/session-context/comprehensive.template.md`
 - Max length: Unlimited
 - Update frequency: After every significant action
 - Sections: Full detail (current behavior)
@@ -393,7 +393,7 @@ Based on current workflow, load configs with documentation mode awareness:
 **Step 4.1: Load Workflow Configuration**
 ```bash
 1. Read current workflow from .AutoSDLC/status.yaml
-2. Load AutoSDLC/workflows/{workflow_name}.yaml
+2. Load `.AutoSDLC-framework/workflows/{workflow_name}.yaml`
 3. Extract workflow.documentation.mode (minimal | moderate | comprehensive)
 ```
 
@@ -401,33 +401,33 @@ Based on current workflow, load configs with documentation mode awareness:
 
 **If mode = "minimal":**
 ```
-- Load ONLY templates from templates/minimal/
-- Skip templates/comprehensive/ entirely
+- Load ONLY templates from `.AutoSDLC-framework/templates/minimal/`
+- Skip `.AutoSDLC-framework/templates/comprehensive/` entirely
 - Expected: 2 templates, ~500 tokens
-- Load templates/session-context/compact.template.md
+- Load `.AutoSDLC-framework/templates/session-context/compact.template.md`
 ```
 
 **If mode = "moderate":**
 ```
-- Load ONLY templates from templates/moderate/
+- Load ONLY templates from `.AutoSDLC-framework/templates/moderate/`
 - Skip PSA, epic, and task templates
 - Expected: 3-4 templates, ~1,500 tokens
-- Load templates/session-context/moderate.template.md
+- Load `.AutoSDLC-framework/templates/session-context/moderate.template.md`
 ```
 
 **If mode = "comprehensive":**
 ```
-- Load ALL templates from templates/comprehensive/
+- Load ALL templates from `.AutoSDLC-framework/templates/comprehensive/`
 - Load complete template suite
 - Expected: 8+ templates, ~5,000 tokens
-- Load templates/session-context/comprehensive.template.md
+- Load `.AutoSDLC-framework/templates/session-context/comprehensive.template.md`
 ```
 
 **Step 4.3: Load Other Configs**
-- `AutoSDLC/config/documentation-modes.yaml` - Mode definitions and budgets
-- `AutoSDLC/config/rules.yaml` - Quality rules and constraints
-- `AutoSDLC/config/agents.yaml` - Which agents are active
-- `AutoSDLC/agents/{agent_id}.yaml` - Current agent's behavior
+- `.AutoSDLC-framework/config/documentation-modes.yaml` - Mode definitions and budgets
+- `.AutoSDLC-framework/config/rules.yaml` - Quality rules and constraints
+- `.AutoSDLC-framework/config/agents.yaml` - Which agents are active
+- `.AutoSDLC-framework/agents/{agent_id}.yaml` - Current agent's behavior
 
 ### Step 5: Resume Work
 
@@ -667,7 +667,7 @@ For each story, enforce **4-gate quality process** (if security-sensitive):
 
 When acting as a specific agent:
 
-1. Read `AutoSDLC/agents/{agent_id}.yaml` for that agent's:
+1. Read `.AutoSDLC-framework/agents/{agent_id}.yaml` for that agent's:
    - Personality and communication style
    - Responsibilities for current phase
    - Behaviors and guidelines
@@ -794,7 +794,7 @@ If Security Expert finds **CRITICAL** vulnerability:
 - ❌ Tests don't pass
 - ❌ Stub functions exist
 
-Load full rules from `AutoSDLC/config/rules.yaml`
+Load full rules from `.AutoSDLC-framework/config/rules.yaml`
 
 ---
 
