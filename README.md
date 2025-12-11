@@ -1,11 +1,28 @@
 # AutoSDLC
 
-## 🙏 Attribution
+## Table of Contents
 
-**AutoSDLC** is based on [DevFlow](https://github.com/dondetir/DevFlow) by [@dondetir](https://github.com/dondetir).
+- [Attribution](#-attribution)
+- [Quick Start](#-quick-start-2-minutes)
+- [What It Is](#what-it-is)
+- [For Organizations](#-for-organizations)
+- [How It Works](#how-it-works)
+- [Example Workflows](#-example-workflows)
+- [The Prompt Engineering Architecture](#the-prompt-engineering-architecture)
+- [Full Installation Guide](#-full-installation-guide)
+- [Team Workflow](#-team-workflow)
+- [Contributing vs Forking](#-contributing-vs-forking)
+- [What This Framework Provides](#-what-this-framework-provides)
+- [Documentation](#-documentation)
+- [Configuration](#-configuration)
+- [How It Works (Detailed)](#-how-it-works)
+- [Updating AutoSDLC](#-updating-autosdlc)
+- [Framework Structure](#-framework-structure)
+- [Is This Prompt Engineering?](#is-this-prompt-engineering)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-DevFlow provided the foundational architecture for multi-agent development workflows using prompt engineering. We are grateful for this innovative framework that serves as the starting point for AutoSDLC. See [ATTRIBUTION.md](ATTRIBUTION.md) for full details.
-
+---
 
 ## 🙏 Attribution
 
@@ -13,6 +30,41 @@ DevFlow provided the foundational architecture for multi-agent development workf
 
 AutoSDLC provided the foundational architecture for multi-agent development workflows using prompt engineering. We are grateful for this innovative framework that serves as the starting point for AutoSDLC. See [ATTRIBUTION.md](ATTRIBUTION.md) for full details.
 
+---
+
+## 🚀 Quick Start (2 Minutes)
+
+> **💡 For detailed instructions, see [SETUP.md](SETUP.md). If you just want to get started quickly, follow these steps:**
+
+Each developer installs AutoSDLC locally. The framework is NOT committed to your project repo.
+
+### Automated Installation (Recommended)
+
+**Linux/Mac:**
+```bash
+cd YourProject
+curl -O https://raw.githubusercontent.com/Omniversys/AutoSDLC/main/install-autosdlc.sh
+bash install-autosdlc.sh
+```
+
+**Windows PowerShell:**
+```powershell
+cd YourProject
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/Omniversys/AutoSDLC/main/install-autosdlc.ps1 -OutFile install-autosdlc.ps1
+.\install-autosdlc.ps1
+```
+
+The script will:
+- Let you choose: Hidden directory OR Global install
+- Clone AutoSDLC repository
+- Update .gitignore
+- Show you next steps
+
+**That's it!** Follow the on-screen instructions to complete setup.
+
+For manual installation, global installation, or detailed setup instructions, see [SETUP.md](SETUP.md).
+
+---
 
 **Where AI Meets Engineering Discipline**
 
@@ -329,142 +381,9 @@ AI reads these → AI follows → AI orchestrates
 
 No compilation. No dependencies. Just prompts and configs.
 
-## 🚀 Quick Start
+## 📖 Full Installation Guide
 
-**Important:** Each developer installs AutoSDLC locally. The framework is NOT committed to your project repo.
-
-### Option 1: Automated Installation (Recommended)
-
-**Install from main repo:**
-
-**Linux/Mac:**
-```bash
-cd YourProject
-curl -O https://raw.githubusercontent.com/dondetir/AutoSDLC/main/install-AutoSDLC.sh
-bash install-AutoSDLC.sh
-```
-
-**Windows PowerShell:**
-```powershell
-cd YourProject
-Invoke-WebRequest -Uri https://raw.githubusercontent.com/dondetir/AutoSDLC/main/install-AutoSDLC.ps1 -OutFile install-AutoSDLC.ps1
-.\install-AutoSDLC.ps1
-```
-
-**Install from your fork** (see [FORK-WORKFLOW.md](FORK-WORKFLOW.md)):
-
-**Linux/Mac:**
-```bash
-AutoSDLC_REPO=https://github.com/yourname/AutoSDLC.git bash install-AutoSDLC.sh
-```
-
-**Windows:**
-```powershell
-$env:AutoSDLC_REPO = "https://github.com/yourname/AutoSDLC.git"
-.\install-AutoSDLC.ps1
-```
-
-The script will:
-- ✅ Let you choose installation method (hidden directory or global)
-- ✅ Clone AutoSDLC repository
-- ✅ Update .gitignore automatically
-- ✅ Show you next steps
-
-### Option 2: Manual Installation
-
-**Strategy A: Hidden Directory (Per-Project)**
-
-```bash
-# All platforms
-cd YourProject
-git clone https://github.com/dondetir/AutoSDLC.git .AutoSDLC-framework
-
-# Update .gitignore
-echo "" >> .gitignore
-echo "# AutoSDLC (installed per-developer)" >> .gitignore
-echo ".AutoSDLC-framework/" >> .gitignore
-echo ".AutoSDLC/" >> .gitignore
-```
-
-**Strategy B: Global Install (One Install, All Projects)**
-
-```bash
-# Linux/Mac: Install globally
-mkdir -p ~/.AutoSDLC
-git clone https://github.com/dondetir/AutoSDLC.git ~/.AutoSDLC/framework
-
-# Create symlink in your project
-cd YourProject
-ln -s ~/.AutoSDLC/framework .AutoSDLC-framework
-
-# Windows: Install globally (PowerShell)
-mkdir $env:USERPROFILE\.AutoSDLC
-git clone https://github.com/dondetir/AutoSDLC.git $env:USERPROFILE\.AutoSDLC\framework
-
-# Create junction in your project (no admin required)
-cd YourProject
-cmd /c mklink /J .AutoSDLC-framework "%USERPROFILE%\.AutoSDLC\framework"
-
-# Or symlink (requires Administrator)
-cmd /c mklink /D .AutoSDLC-framework "%USERPROFILE%\.AutoSDLC\framework"
-
-# Update .gitignore (all platforms)
-echo "" >> .gitignore
-echo "# AutoSDLC (installed per-developer)" >> .gitignore
-echo ".AutoSDLC-framework/" >> .gitignore
-echo ".AutoSDLC/" >> .gitignore
-```
-
-### Setup Entry Point (First Developer Only)
-
-Create entry point file and **commit it** so team members can use AutoSDLC:
-
-**For GitHub Copilot** - Create `.github/copilot-instructions.md`:
-```markdown
-# AutoSDLC Orchestration
-Read and follow: ./.AutoSDLC-framework/ORCHESTRATOR.md
-
-You are working with AutoSDLC, a multi-agent development workflow framework.
-Check `.AutoSDLC/copilot-state.md` for current state and follow the active workflow.
-```
-
-**For Claude Code** - Create `claude.md`:
-```markdown
-# AutoSDLC Orchestration
-Read and follow: ./.AutoSDLC-framework/ORCHESTRATOR.md
-```
-
-**For Cursor** - Create `.cursorrules`:
-```markdown
-# AutoSDLC Orchestration
-Read and follow: ./.AutoSDLC-framework/ORCHESTRATOR.md
-```
-
-**Commit entry point** (first developer only):
-```bash
-git add .gitignore .github/copilot-instructions.md
-git commit -m "Add AutoSDLC framework support"
-git push
-```
-
-### Start Working
-
-**GitHub Copilot:**
-```
-Open VS Code → Start coding
-Say: "@workspace Check .AutoSDLC/copilot-state.md and begin"
-```
-
-**Claude Code / Cursor / Others:**
-```bash
-claude-code  # or cursor, gemini-cli, aider, etc.
-```
-
-**That's it!** The AI will:
-- Auto-initialize `.AutoSDLC/` structure on first run
-- Initialize memory system (semantic, episodic, procedural)
-- Show the status banner
-- Guide you through the workflow
+For complete installation instructions including manual setup, global installation, entry point configuration, and team workflow, see **[SETUP.md](SETUP.md)**.
 
 ---
 
