@@ -14,6 +14,9 @@ install-autosdlc.ps1 export-ignore
 # Exclude git-specific files
 .gitattributes export-ignore
 
+# Exclude dotgithub-contents (copied to .github during installation)
+dotgithub-contents/ export-ignore
+
 # Keep these essential files (explicitly listed for clarity):
 # README.md - Framework overview
 # SETUP.md - Installation guide

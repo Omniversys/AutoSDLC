@@ -166,6 +166,11 @@ if [ -d .AutoSDLC-framework/dotgithub-contents ]; then
     echo "📋 Copying GitHub configuration files..."
     cp -r .AutoSDLC-framework/dotgithub-contents/* .github/
     echo "✅ Copied files from dotgithub-contents to .github"
+    
+    # Remove dotgithub-contents from framework after copying
+    echo "🧹 Cleaning up dotgithub-contents..."
+    rm -rf .AutoSDLC-framework/dotgithub-contents
+    echo "✅ Removed dotgithub-contents from framework"
 else
     echo "⚠️  dotgithub-contents not found in framework, skipping copy"
 fi

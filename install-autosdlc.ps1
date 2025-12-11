@@ -200,6 +200,11 @@ if (Test-Path $dotgithubSource) {
     Write-Host "📋 Copying GitHub configuration files..." -ForegroundColor Cyan
     Copy-Item -Path "$dotgithubSource\*" -Destination .github -Recurse -Force
     Write-Host "✅ Copied files from dotgithub-contents to .github" -ForegroundColor Green
+    
+    # Remove dotgithub-contents from framework after copying
+    Write-Host "🧹 Cleaning up dotgithub-contents..." -ForegroundColor Cyan
+    Remove-Item $dotgithubSource -Recurse -Force
+    Write-Host "✅ Removed dotgithub-contents from framework" -ForegroundColor Green
 } else {
     Write-Host "⚠️  dotgithub-contents not found in framework, skipping copy" -ForegroundColor Yellow
 }
