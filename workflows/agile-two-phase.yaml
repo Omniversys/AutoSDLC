@@ -58,6 +58,10 @@ phases:
           - "High-level scope defined"
           - "Client approval received"
 
+        on_approval:
+          - "Trigger Gate 2 Stage 1: Epic creation process"
+          - "Product Owner begins epic document creation"
+
         next_gate: "gate_2"
 
       gate_2:
@@ -66,13 +70,81 @@ phases:
         deliverables:
           - "docs/epics/*.md"
           - "docs/stories/*.md"
+          - "docs/gate2-summary.md"
         approval_required: true
         client_action: "Review and approve detailed user stories"
+
+        process:
+          stage_1_create_epics:
+            - "Product Owner creates epic documents from PSA"
+            - "IF Atlassian MCP server is available:"
+            - "  • Present epic summaries to client for review"
+            - "  • Show: Epic title, description, key features, dependencies and risks"
+            - "  • Ask client: 'Review these epics. Approve to create in Jira, or suggest changes'"
+            - "  • WAIT for client approval or changes"
+            - "  • After approval: Create epics in Jira using mcp_atlassian tools"
+            - "  • Link epics to parent EWO/issue"
+            - "  • Update epic documents with Jira epic keys and URLs"
+            - "IF Atlassian MCP server NOT available:"
+            - "  • Create epic markdown documents only"
+            - "  • Note in documents: 'Jira epic creation pending manual action'"
+
+          stage_2_create_stories:
+            - "Product Owner creates user story documents for each epic"
+            - "Assign story points to each story"
+            - "Document dependencies between stories"
+            - "IF Atlassian MCP server is available:"
+            - "  • Present story summaries to client for review"
+            - "  • Show: Story title, epic, story points, acceptance criteria summary"
+            - "  • Ask client: 'Review these stories. Approve to create in Jira, or suggest changes'"
+            - "  • WAIT for client approval or changes"
+            - "  • After approval: Create stories in Jira using mcp_atlassian tools"
+            - "  • Assign stories to their parent epics"
+            - "  • Set Story Points field in Jira"
+            - "  • Link stories to epics and parent EWO"
+            - "  • Update story documents with Jira issue keys and URLs"
+            - "IF Atlassian MCP server NOT available:"
+            - "  • Create story markdown documents only"
+            - "  • Note in documents: 'Jira story creation pending manual action'"
+
+          stage_3_create_summary:
+            - "Create Gate 2 Summary document using gate2-summary.template.md"
+            - "Include:"
+            - "  • Complete epic hierarchy with Jira links (if available)"
+            - "  • Story tables for each epic with points and Jira links"
+            - "  • Story dependency maps"
+            - "  • Scope summary with total story counts and points"
+            - "  • Critical path and parallel workstreams"
+            - "  • Next steps for Gate 3"
+            - "Save as: docs/gate2-summary.md"
+
+        jira_integration:
+          required_tools:
+            - "mcp_atlassian_atl_createJiraIssue (for epics and stories)"
+            - "mcp_atlassian_atl_getVisibleJiraProjects (to verify project access)"
+            - "mcp_atlassian_atl_editJiraIssue (to set story points and epic links)"
+          
+          epic_creation:
+            - "Use issue type: 'Epic'"
+            - "Set summary from epic title"
+            - "Set description from epic markdown content"
+            - "Link to parent EWO using epic link field"
+          
+          story_creation:
+            - "Use issue type: 'Story'"
+            - "Set summary from story title"
+            - "Set description from story markdown content"
+            - "Set 'Story Points' field with estimated points"
+            - "Link to parent epic using epic link field"
+            - "Add labels if specified in story document"
 
         success_criteria:
           - "All user stories created with acceptance criteria"
           - "Story estimates provided"
           - "Dependencies identified"
+          - "IF MCP available: All epics created in Jira with client approval"
+          - "IF MCP available: All stories created in Jira under correct epics with story points"
+          - "Gate 2 Summary document created with complete mapping"
           - "Client approval received"
 
         next_gate: "gate_3"
