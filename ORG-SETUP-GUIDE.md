@@ -406,7 +406,7 @@ echo "=============================="
 echo ""
 echo "📦 Step 1: Installing AutoSDLC..."
 if [ ! -d ~/.AutoSDLC-framework ]; then
-    git clone https://github.com/dondetir/AutoSDLC.git ~/.AutoSDLC-framework
+    git clone https://github.com/Omniversys/AutoSDLC.git ~/.AutoSDLC-framework
     echo "✅ AutoSDLC installed"
 else
     echo "✅ AutoSDLC already installed"

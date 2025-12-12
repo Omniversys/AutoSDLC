@@ -26,9 +26,7 @@
 
 ## 🙏 Attribution
 
-**AutoSDLC** is based on [AutoSDLC](https://github.com/dondetir/AutoSDLC) by [@dondetir](https://github.com/dondetir).
-
-AutoSDLC provided the foundational architecture for multi-agent development workflows using prompt engineering. We are grateful for this innovative framework that serves as the starting point for AutoSDLC. See [ATTRIBUTION.md](ATTRIBUTION.md) for full details.
+AutoSDLC is inspired by innovative multi-agent development workflow frameworks. See [ATTRIBUTION.md](ATTRIBUTION.md) for full details.
 
 ---
 
@@ -73,9 +71,9 @@ For manual installation, global installation, or detailed setup instructions, se
 A config-driven framework that orchestrates AI coding assistants through structured prompts. Define agent behaviors, workflows, and quality gates in YAML—AI follows your methodology.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-v1.0.0-blue.svg)](https://github.com/dondetir/AutoSDLC/releases)
-[![GitHub Issues](https://img.shields.io/github/issues/dondetir/AutoSDLC.svg)](https://github.com/dondetir/AutoSDLC/issues)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/dondetir/AutoSDLC/blob/main/CONTRIBUTING.md)
+[![Version](https://img.shields.io/badge/version-v1.0.0-blue.svg)](https://github.com/Omniversys/AutoSDLC/releases)
+[![GitHub Issues](https://img.shields.io/github/issues/Omniversys/AutoSDLC.svg)](https://github.com/Omniversys/AutoSDLC/issues)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/Omniversys/AutoSDLC/blob/main/CONTRIBUTING.md)
 
 ## What It Is
 
@@ -398,7 +396,7 @@ For complete installation instructions including manual setup, global installati
 
 **Other Team Members (Join):**
 1. ✅ Pull the repo (gets `.gitignore` and entry point)
-2. ✅ Install AutoSDLC locally: Run install script OR `git clone https://github.com/dondetir/AutoSDLC.git .AutoSDLC-framework`
+2. ✅ Install AutoSDLC locally: Run install script OR `git clone https://github.com/Omniversys/AutoSDLC.git .AutoSDLC-framework`
 3. ✅ Start AI tool - AutoSDLC auto-initializes
 
 **Key Points:**
@@ -427,7 +425,7 @@ git checkout -b feature/your-improvement
 # Make changes
 git commit -m "Improve error handling"
 git push origin feature/your-improvement
-# Create PR to dondetir/AutoSDLC
+# Create PR to Omniversys/AutoSDLC
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.

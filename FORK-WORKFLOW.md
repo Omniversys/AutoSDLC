@@ -34,7 +34,7 @@ Complete guide for forking AutoSDLC for personal or organizational customization
 
 ### Step 1: Fork on GitHub
 
-1. Go to https://github.com/dondetir/AutoSDLC
+1. Go to https://github.com/Omniversys/AutoSDLC
 2. Click **Fork** button (top right)
 3. Select your account as destination
 4. Wait for fork to complete
@@ -47,7 +47,7 @@ Result: `https://github.com/YOUR-USERNAME/AutoSDLC`
 
 ```bash
 # Using environment variable
-AutoSDLC_REPO=https://github.com/YOUR-USERNAME/AutoSDLC.git bash <(curl -fsSL https://raw.githubusercontent.com/dondetir/AutoSDLC/main/install-AutoSDLC.sh)
+AutoSDLC_REPO=https://github.com/YOUR-USERNAME/AutoSDLC.git bash <(curl -fsSL https://raw.githubusercontent.com/Omniversys/AutoSDLC/main/install-AutoSDLC.sh)
 
 # Or clone manually
 git clone https://github.com/YOUR-USERNAME/AutoSDLC.git .AutoSDLC-framework
@@ -65,7 +65,7 @@ git remote -v
 ```powershell
 # Using environment variable
 $env:AutoSDLC_REPO = "https://github.com/YOUR-USERNAME/AutoSDLC.git"
-iex (iwr https://raw.githubusercontent.com/dondetir/AutoSDLC/main/install-AutoSDLC.ps1)
+iex (iwr https://raw.githubusercontent.com/Omniversys/AutoSDLC/main/install-AutoSDLC.ps1)
 
 # Or clone manually
 git clone https://github.com/YOUR-USERNAME/AutoSDLC.git .AutoSDLC-framework
@@ -145,7 +145,7 @@ git push origin main
 
 **As org admin:**
 
-1. Fork https://github.com/dondetir/AutoSDLC to `yourcompany/AutoSDLC`
+1. Fork https://github.com/Omniversys/AutoSDLC to `yourcompany/AutoSDLC`
 2. Create `custom` or `company` branch for modifications
 3. Set up branch protection on `main` (require PRs, reviews)
 
@@ -223,7 +223,7 @@ git push origin main --tags
 AutoSDLC_REPO="git@github.com:yourcompany/AutoSDLC.git"
 
 echo "🏢 Installing ACME AutoSDLC"
-curl -fsSL https://raw.githubusercontent.com/dondetir/AutoSDLC/main/install-AutoSDLC.sh | \
+curl -fsSL https://raw.githubusercontent.com/Omniversys/AutoSDLC/main/install-AutoSDLC.sh | \
   AutoSDLC_REPO=$AutoSDLC_REPO bash
 ```
 
@@ -254,7 +254,7 @@ jobs:
       
       - name: Fetch upstream
         run: |
-          git remote add upstream https://github.com/dondetir/AutoSDLC.git
+          git remote add upstream https://github.com/Omniversys/AutoSDLC.git
           git fetch upstream
       
       - name: Create PR for upstream changes
@@ -444,7 +444,7 @@ git push origin main --force
 
 **Symptom:**
 ```
-Your fork is 45 commits behind dondetir:main
+Your fork is 45 commits behind Omniversys:main
 ```
 
 **Solution:**
@@ -543,7 +543,7 @@ fatal: repository 'https://github.com/yourname/AutoSDLC.git' not found
 
 ## 📚 Additional Resources
 
-- **Main AutoSDLC Repo**: https://github.com/dondetir/AutoSDLC
+- **Main AutoSDLC Repo**: https://github.com/Omniversys/AutoSDLC
 - **Contributing Guide**: [CONTRIBUTING.md](CONTRIBUTING.md)
 - **Setup Guide**: [SETUP.md](SETUP.md)
 - **Organizational Memory**: [ORGANIZATIONAL-MEMORY.md](ORGANIZATIONAL-MEMORY.md)

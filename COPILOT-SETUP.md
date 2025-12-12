@@ -26,7 +26,7 @@ GitHub Copilot has some unique characteristics compared to Claude Code or Cursor
 
 ```bash
 cd YourProject
-git clone https://github.com/dondetir/AutoSDLC.git AutoSDLC
+git clone https://github.com/Omniversys/AutoSDLC.git AutoSDLC
 echo "AutoSDLC/" >> .gitignore
 ```
 

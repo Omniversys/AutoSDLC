@@ -120,7 +120,7 @@ Add-Content -Path .gitignore -Value \"`n# AutoSDLC Framework (installed per-deve
 
 # Install AutoSDLC globally (one time)
 mkdir $env:USERPROFILE\\.AutoSDLC
-git clone https://github.com/dondetir/AutoSDLC.git $env:USERPROFILE\\.AutoSDLC\\framework
+git clone https://github.com/Omniversys/AutoSDLC.git $env:USERPROFILE\.AutoSDLC\framework
 
 # Create symlink in your project
 cd YourProject

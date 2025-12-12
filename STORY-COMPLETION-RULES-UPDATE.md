@@ -1,4 +1,4 @@
-# DevFlow Story Completion Rules Update
+# AutoSDLC Story Completion Rules Update
 
 **Date:** 2025-10-06
 **Reason:** Prevent incomplete stories from being marked as complete
@@ -8,7 +8,7 @@
 
 ## What Was Changed
 
-### 1. Updated `DevFlow/config/rules.yaml`
+### 1. Updated `AutoSDLC/config/rules.yaml`
 
 Added 4 new strict enforcement rules under `execution_phase`:
 
@@ -81,7 +81,7 @@ Added 4 new strict enforcement rules under `execution_phase`:
 - **Enforcement:** Strict
 - **Penalty:** Status update rejected, PM must re-verify
 
-### 2. Updated `DevFlow/workflows/agile-two-phase.yaml`
+### 2. Updated `AutoSDLC/workflows/agile-two-phase.yaml`
 
 Added complete story lifecycle workflow:
 
@@ -116,7 +116,7 @@ todo → in_progress → code_review → testing → done
 2. **Gate QA:** QA Verification
 3. **Gate PM:** PM Final Verification
 
-### 3. Updated `DevFlow/ORCHESTRATOR.md`
+### 3. Updated `AutoSDLC/ORCHESTRATOR.md`
 
 Added comprehensive "Story Completion Rules" section:
 - 3-Gate mandatory process

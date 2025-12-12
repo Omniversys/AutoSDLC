@@ -1,5 +1,5 @@
  ╔══════════════════════════════════════════════════════════════════════════════╗
-  ║                    DEVFLOW - Multi-Agent Development Workflow                 ║
+  ║                   AUTOSDLC - Multi-Agent Development Workflow                 ║
   ║                    Where AI Meets Engineering Discipline                      ║
   ║              Config-Driven Prompt Engineering Framework for AI                ║
   ╚══════════════════════════════════════════════════════════════════════════════╝
@@ -12,12 +12,12 @@
   │ STEP 1: SETUP                                                                │
   └──────────────────────────────────────────────────────────────────────────────┘
 
-      Your Project                    Clone DevFlow                Add One Line
-      ┌─────────┐                     ┌─────────┐                ┌──────────────┐
-      │  src/   │                     │ DevFlow/│                │  claude.md   │
+      Your Project                   Clone AutoSDLC               Add One Line
+      ┌─────────┐                     ┌──────────┐               ┌─────────────┐
+      │  src/   │                     │ AutoSDLC/│               │  claude.md   │
       │  test/  │  ────────────────>  │ config/ │  ───────────>  │ Read and     │
       │  docs/  │                     │ agents/ │                │ follow:      │
-      └─────────┘                     │ workflows/               │ DevFlow/     │
+      └─────────┘                     │ workflows/               │ AutoSDLC/    │
                                       └─────────┘                │ ORCHESTRATOR │
                                                                  └──────────────┘
 
@@ -159,21 +159,21 @@
   │ ORGANIZATIONAL MEMORY SYSTEM (Enterprise Extension)                         │
   └──────────────────────────────────────────────────────────────────────────────┘
 
-  For enterprise deployments, DevFlow extends to a **four-tier memory hierarchy**:
+  For enterprise deployments, AutoSDLC extends to a **four-tier memory hierarchy**:
 
-  1. **Organization Level** (~/.devflow/org-memory/)
+  1. **Organization Level** (~/.AutoSDLC/org-memory/)
      • Company-wide standards, security policies, architecture patterns
      • Git-versioned, enforced across all teams
 
-  2. **Team Level** (~/devflow-team-memory/)
+  2. **Team Level** (~/AutoSDLC-team-memory/)
      • Team conventions, shared ADRs, collaborative learnings
      • Git repository for team collaboration
 
-  3. **User Level** (~/.devflow/global-memory/)
+  3. **User Level** (~/.AutoSDLC/global-memory/)
      • Personal cross-project patterns and preferences
      • Private to individual developer
 
-  4. **Project Level** (.devflow/memory/)
+  4. **Project Level** (.AutoSDLC/memory/)
      • Project-specific context (existing individual memory)
 
   **Loading Priority:** Project → User → Team → Organization (higher overrides lower)
@@ -230,7 +230,7 @@
 
   In Summary:
 
-  DevFlow is a prompt engineering framework that transforms any AI coding assistant into a structured multi-agent development team with memory. It's not software you install—it's a methodology the AI follows by reading YAML configs and markdown templates. You get organized workflows, quality gates, multi-agent coordination, and cross-session continuity without writing any execution code.
+  AutoSDLC is a prompt engineering framework that transforms any AI coding assistant into a structured multi-agent development team with memory. It's not software you install—it's a methodology the AI follows by reading YAML configs and markdown templates. You get organized workflows, quality gates, multi-agent coordination, and cross-session continuity without writing any execution code.
 
   For detailed architecture diagrams and system design, see ARCHITECTURE.md
 

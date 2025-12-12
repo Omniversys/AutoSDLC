@@ -488,4 +488,4 @@ Yes! MIT license allows commercial use. AutoSDLC helps you:
 
 ---
 
-**Still have questions?** [Open an issue](https://github.com/dondetir/AutoSDLC/issues/new) or [start a discussion](https://github.com/dondetir/AutoSDLC/discussions)!
+**Still have questions?** [Open an issue](https://github.com/Omniversys/AutoSDLC/issues/new) or [start a discussion](https://github.com/Omniversys/AutoSDLC/discussions)!

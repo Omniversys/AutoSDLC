@@ -30,7 +30,7 @@ modes:
 
     directory_structure:
       required:
-        - ".devflow/"
+        - ".AutoSDLC/"
         - "docs/bug-fixes/"
       optional: []
       skip:
@@ -64,7 +64,7 @@ modes:
 
     directory_structure:
       required:
-        - ".devflow/"
+        - ".AutoSDLC/"
         - "docs/features/"
         - "docs/stories/"
       optional:
@@ -95,7 +95,7 @@ modes:
     directory_structure:
       required:
         - ".devflow/"
-        - ".devflow/quality-reports/"
+        - ".AutoSDLC/quality-reports/"
         - "docs/epics/"
         - "docs/stories/"
         - "docs/tasks/"
