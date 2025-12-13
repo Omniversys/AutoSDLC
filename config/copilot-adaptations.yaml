@@ -195,6 +195,70 @@ memory_loading:
     other_agent_episodic:
       when: "Collaborating with another agent"
 
+# Aggressive Memory Offloading for Token Management
+
+memory_management:
+  strategy: "aggressive_offload"
+  
+  checkpoint_triggers:
+    gate_completion: true  # Always checkpoint after gate
+    message_interval: 15   # Every 15 AI messages
+    token_threshold: 0.25  # At 25% of context limit (auto-detect if possible)
+    before_major_decision: true
+    
+  checkpoint_procedure:
+    1_summarize:
+      - "Summarize conversation since last checkpoint (200-500 words)"
+      - "Focus on: decisions made, actions taken, blockers encountered"
+    
+    2_extract_to_semantic:
+      - "Extract facts, decisions, architecture to knowledge-base.md"
+      - "Extract JIRA workflow changes to jira-workflow.md"
+      - "Update project glossary if new terms introduced"
+    
+    3_extract_to_episodic:
+      - "Update current agent's episodic memory with session actions"
+      - "Include: what was done, why, outcomes, lessons"
+    
+    4_extract_to_procedural:
+      - "Update skills/preferences if new patterns learned"
+      - "Document effective techniques that worked"
+    
+    5_update_state:
+      - "Update copilot-state.md or status.yaml with current position"
+      - "Update action-plan.md with next steps"
+    
+    6_truncate_context:
+      - "Clear conversation history except last 5 messages"
+      - "Mark checkpoint with: '✅ Memory Checkpoint #{number} saved at {timestamp}'"
+    
+    7_verify:
+      - "Read back knowledge-base.md last 10 lines to confirm"
+      - "Confirm checkpoint number incremented"
+
+  memory_compression:
+    enabled: true
+    compression_triggers:
+      - "Weekly compression of episodic memories older than 7 days"
+      - "Monthly compression of episodic memories older than 30 days"
+    
+    compression_process:
+      - "Replace daily episodic entries with weekly summary"
+      - "Keep: key decisions, major learnings, critical events"
+      - "Archive: detailed message-by-message logs to .AutoSDLC/memory/archive/"
+      - "Format: YYYY-MM-weekly-summary.md or YYYY-MM-monthly-summary.md"
+
+  context_limit_detection:
+    auto_detect: true  # Try to detect token usage automatically
+    fallback_threshold: 0.25  # Use 25% if auto-detect unavailable
+    warning_levels:
+      - threshold: 0.25
+        action: "Trigger memory checkpoint"
+      - threshold: 0.50
+        action: "Force checkpoint + aggressive compression"
+      - threshold: 0.75
+        action: "Emergency checkpoint + warn user"
+
 # Optimization Strategies
 
 optimization:

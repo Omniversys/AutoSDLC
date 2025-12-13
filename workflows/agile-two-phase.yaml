@@ -53,14 +53,81 @@ phases:
         approval_required: true
         client_action: "Review and approve PSA with all epics"
 
+        jira_workflow_discovery:
+          - "IF Atlassian MCP server is available:"
+          - "  STEP 1: Get Project Information"
+          - "    • PM asks user: 'What is your JIRA project key?' (e.g., PROJ, CAAD)"
+          - "    • PM uses mcp_atlassian_atl_getVisibleJiraProjects to verify access"
+          - "    • PM confirms project details with user"
+          - ""
+          - "  STEP 2: Learn Workflow via Test Items"
+          - "    • PM creates test Epic: 'AutoSDLC Test Epic - Safe to Delete'"
+          - "    • PM creates test Story under Epic: 'AutoSDLC Test Story - Safe to Delete'"
+          - "    • PM creates test Sub-task under Story: 'AutoSDLC Test Subtask - Safe to Delete'"
+          - "    • PM creates test Bug: 'AutoSDLC Test Bug - Safe to Delete'"
+          - "    • PM creates test Task: 'AutoSDLC Test Task - Safe to Delete'"
+          - "    • For each test item:"
+          - "      - Use mcp_atlassian_atl_getTransitionsForJiraIssue to get available transitions"
+          - "      - Document: status, available transitions, transition IDs, required fields"
+          - "      - Try each transition to map workflow (or ask user permission)"
+          - ""
+          - "  STEP 3: Document Workflow"
+          - "    • PM creates .AutoSDLC/memory/semantic/jira-workflow.md using jira-workflow.template.md"
+          - "    • Include for each issue type:"
+          - "      - Available statuses"
+          - "      - Transition map (from → to, transition name, ID)"
+          - "      - Custom fields (Story Points, Epic Link, etc.)"
+          - "    • Document any multi-project configuration if applicable"
+          - ""
+          - "  STEP 4: Cleanup Test Items"
+          - "    • PM asks user: 'Delete test items or keep marked as test?'"
+          - "    • If delete: PM deletes test items"
+          - "    • If keep: PM adds label 'autosdlc-test' and comment 'Safe to ignore'"
+          - ""
+          - "  STEP 5: Initialize Offline Queue"
+          - "    • PM creates empty offline queue in jira-workflow.md"
+          - "    • PM ready for JIRA coordination"
+          - ""
+          - "IF Atlassian MCP server NOT available:"
+          - "  • PM notes in semantic memory: 'JIRA integration not available'"
+          - "  • PM continues with file-based workflow only"
+
         success_criteria:
           - "All epics identified and described"
           - "High-level scope defined"
           - "Client approval received"
+          - "IF MCP available: JIRA workflow learned and documented"
 
         on_approval:
           - "Trigger Gate 2 Stage 1: Epic creation process"
           - "Product Owner begins epic document creation"
+          - "IF Atlassian MCP available: PM updates parent FEATURE status to 'In Progress'"
+
+        memory_updates:
+          semantic:
+            - "MANDATORY: Update .AutoSDLC/memory/semantic/knowledge-base.md with:"
+            - "  • Project scope and epic summaries from PSA"
+            - "  • Key stakeholders and their roles"
+            - "  • Project constraints and assumptions"
+            - "MANDATORY: Create .AutoSDLC/memory/semantic/jira-workflow.md with:"
+            - "  • Complete workflow mappings for all issue types"
+            - "  • Multi-project configuration if applicable"
+          episodic:
+            - "MANDATORY: Update .AutoSDLC/memory/episodic/product-owner.md with:"
+            - "  • PSA creation process and decisions made"
+            - "  • Client feedback and concerns"
+            - "  • Epic prioritization rationale"
+            - "MANDATORY: Update .AutoSDLC/memory/episodic/pm.md with:"
+            - "  • JIRA workflow discovery process"
+            - "  • Test items created and deleted/marked"
+            - "  • Any JIRA access issues encountered"
+          procedural:
+            - "Update .AutoSDLC/memory/procedural/user-preferences.yaml if:"
+            - "  • Client expressed specific workflow preferences"
+            - "  • Documentation format preferences noted"
+          checkpoint:
+            - "EXECUTE MEMORY CHECKPOINT after gate completion"
+            - "Mark as: Checkpoint #{N} - Gate 1 PSA Complete"
 
         next_gate: "gate_2"
 
@@ -82,12 +149,14 @@ phases:
             - "  • Show: Epic title, description, key features, dependencies and risks"
             - "  • Ask client: 'Review these epics. Approve to create in Jira, or suggest changes'"
             - "  • WAIT for client approval or changes"
-            - "  • After approval: Create epics in Jira using mcp_atlassian tools"
-            - "  • Link epics to parent EWO/issue"
-            - "  • Update epic documents with Jira epic keys and URLs"
+            - "  • After approval: PM creates epics in Jira using learned workflow from jira-workflow.md"
+            - "  • PM links epics to parent FEATURE using epic link field"
+            - "  • PM updates epic documents with Jira epic keys and URLs"
+            - "  • PM coordinates with Product Owner on completion"
             - "IF Atlassian MCP server NOT available:"
             - "  • Create epic markdown documents only"
-            - "  • Note in documents: 'Jira epic creation pending manual action'"
+            - "  • PM queues epic creation in jira-workflow.md offline_queue"
+            - "  • Note in documents: 'Jira epic creation pending MCP availability'"
 
           stage_2_create_stories:
             - "Product Owner creates user story documents for each epic"
@@ -98,14 +167,16 @@ phases:
             - "  • Show: Story title, epic, story points, acceptance criteria summary"
             - "  • Ask client: 'Review these stories. Approve to create in Jira, or suggest changes'"
             - "  • WAIT for client approval or changes"
-            - "  • After approval: Create stories in Jira using mcp_atlassian tools"
-            - "  • Assign stories to their parent epics"
-            - "  • Set Story Points field in Jira"
-            - "  • Link stories to epics and parent EWO"
-            - "  • Update story documents with Jira issue keys and URLs"
+            - "  • After approval: PM creates stories in Jira using learned workflow"
+            - "  • PM assigns stories to their parent epics"
+            - "  • PM sets Story Points field in Jira"
+            - "  • PM links stories to epics and parent FEATURE"
+            - "  • PM updates story documents with Jira issue keys and URLs"
+            - "  • PM coordinates with Product Owner on completion"
             - "IF Atlassian MCP server NOT available:"
             - "  • Create story markdown documents only"
-            - "  • Note in documents: 'Jira story creation pending manual action'"
+            - "  • PM queues story creation in jira-workflow.md offline_queue"
+            - "  • Note in documents: 'Jira story creation pending MCP availability'"
 
           stage_3_create_summary:
             - "Create Gate 2 Summary document using gate2-summary.template.md"
@@ -119,16 +190,22 @@ phases:
             - "Save as: docs/gate2-summary.md"
 
         jira_integration:
+          coordination:
+            - "PM coordinates all JIRA operations using learned workflow from jira-workflow.md"
+            - "PM uses issue type mappings and transition IDs from Gate 1 workflow discovery"
+            - "PM ensures proper status transitions and field updates"
+          
           required_tools:
             - "mcp_atlassian_atl_createJiraIssue (for epics and stories)"
             - "mcp_atlassian_atl_getVisibleJiraProjects (to verify project access)"
             - "mcp_atlassian_atl_editJiraIssue (to set story points and epic links)"
+            - "mcp_atlassian_atl_transitionJiraIssue (to update statuses)"
           
           epic_creation:
-            - "Use issue type: 'Epic'"
+            - "Use issue type: 'Epic' (or custom type from jira-workflow.md)"
             - "Set summary from epic title"
             - "Set description from epic markdown content"
-            - "Link to parent EWO using epic link field"
+            - "Link to parent FEATURE using epic link field"
           
           story_creation:
             - "Use issue type: 'Story'"
@@ -137,6 +214,34 @@ phases:
             - "Set 'Story Points' field with estimated points"
             - "Link to parent epic using epic link field"
             - "Add labels if specified in story document"
+
+        memory_updates:
+          semantic:
+            - "MANDATORY: Update .AutoSDLC/memory/semantic/knowledge-base.md with:"
+            - "  • Epic and story structure"
+            - "  • Story dependencies and relationships"
+            - "  • Total scope (epic count, story count, story points)"
+            - "  • Critical path and parallel workstreams"
+            - "MANDATORY: Update .AutoSDLC/memory/semantic/jira-workflow.md with:"
+            - "  • Epic/story creation operations completed"
+            - "  • JIRA keys and links for all created items"
+            - "  • Offline queue status (flush if MCP was available)"
+          episodic:
+            - "MANDATORY: Update .AutoSDLC/memory/episodic/product-owner.md with:"
+            - "  • Epic and story creation decisions"
+            - "  • Client feedback and changes requested"
+            - "  • Scope adjustments made"
+            - "MANDATORY: Update .AutoSDLC/memory/episodic/pm.md with:"
+            - "  • JIRA operations performed (epics/stories created)"
+            - "  • Any JIRA workflow issues or adjustments"
+            - "  • Client approval timeline"
+          procedural:
+            - "Update .AutoSDLC/memory/procedural/user-preferences.yaml if:"
+            - "  • Client expressed story format preferences"
+            - "  • Specific JIRA field preferences noted"
+          checkpoint:
+            - "EXECUTE MEMORY CHECKPOINT after gate completion"
+            - "Mark as: Checkpoint #{N} - Gate 2 Stories Complete"
 
         success_criteria:
           - "All user stories created with acceptance criteria"
@@ -169,12 +274,42 @@ phases:
           - "Document client's chosen options"
           - "Create detailed architecture from client decisions"
 
+        jira_integration:
+          - "IF Atlassian MCP available:"
+          - "  • PM adds architecture approval comment to parent FEATURE"
+          - "  • Comment includes: link to approved-architecture.md, tech stack summary"
+          - "  • PM coordinates with Solution Architect on JIRA updates"
+
+        memory_updates:
+          semantic:
+            - "MANDATORY: Update .AutoSDLC/memory/semantic/knowledge-base.md with:"
+            - "  • Approved architecture details"
+            - "  • Technology stack decisions (locked)"
+            - "  • Client's chosen options from proposal"
+            - "  • Architecture constraints and assumptions"
+          episodic:
+            - "MANDATORY: Update .AutoSDLC/memory/episodic/solution-architect.md with:"
+            - "  • Architecture options presented"
+            - "  • Client decision-making process"
+            - "  • Rationale for recommended options"
+            - "MANDATORY: Update .AutoSDLC/memory/episodic/pm.md with:"
+            - "  • JIRA comment added to FEATURE"
+            - "  • Architecture approval milestone"
+          procedural:
+            - "Update .AutoSDLC/memory/procedural/user-preferences.yaml if:"
+            - "  • Client expressed architecture documentation preferences"
+            - "  • Specific tech stack preferences for future projects"
+          checkpoint:
+            - "EXECUTE MEMORY CHECKPOINT after gate completion"
+            - "Mark as: Checkpoint #{N} - Gate 3 Architecture Locked"
+
         success_criteria:
           - "All technical options presented (backend, frontend, database, etc.)"
           - "Client makes all technical decisions"
           - "Architecture fully documented"
           - "Tech stack locked"
           - "Client says 'Architecture approved'"
+          - "IF MCP available: Architecture approval recorded in JIRA FEATURE"
 
         next_gate: "gate_4"
 
@@ -187,10 +322,54 @@ phases:
         approval_required: true
         client_action: "Review and approve sprint plan and task assignments"
 
+        pm_responsibilities:
+          - "Break stories into technical tasks"
+          - "Assign tasks to specialized agents"
+          - "Create sprint timeline with milestones"
+          - "Coordinate with all agents on capacity and dependencies"
+
+        jira_integration:
+          - "IF Atlassian MCP available:"
+          - "  • PM creates Sub-tasks in JIRA for each technical task"
+          - "  • PM assigns Sub-tasks to agents (using agent role as assignee indicator)"
+          - "  • PM links Sub-tasks to parent Stories"
+          - "  • PM adds sprint information to Stories and Sub-tasks"
+          - "  • PM transitions Stories from 'Backlog' to 'Ready for Development' (using learned workflow)"
+          - "IF MCP NOT available:"
+          - "  • PM queues Sub-task creation in jira-workflow.md offline_queue"
+
+        memory_updates:
+          semantic:
+            - "MANDATORY: Update .AutoSDLC/memory/semantic/knowledge-base.md with:"
+            - "  • Sprint plan structure and timeline"
+            - "  • Task-to-agent assignments"
+            - "  • Critical path and dependencies"
+            - "  • Sprint milestones and deliverables"
+            - "MANDATORY: Update .AutoSDLC/memory/semantic/jira-workflow.md with:"
+            - "  • Sub-tasks created in JIRA"
+            - "  • Sprint field values used"
+            - "  • Story status transitions performed"
+          episodic:
+            - "MANDATORY: Update .AutoSDLC/memory/episodic/pm.md with:"
+            - "  • Sprint planning decisions"
+            - "  • Task breakdown rationale"
+            - "  • Agent assignment strategy"
+            - "  • Client feedback on sprint plan"
+            - "  • JIRA operations performed"
+          procedural:
+            - "Update .AutoSDLC/memory/procedural/user-preferences.yaml if:"
+            - "  • Client expressed sprint length preferences"
+            - "  • Specific task breakdown preferences noted"
+          checkpoint:
+            - "EXECUTE MEMORY CHECKPOINT after gate completion"
+            - "Mark as: Checkpoint #{N} - Gate 4 Sprint Planned"
+
         success_criteria:
           - "Stories broken down into tasks"
           - "Tasks assigned to agents"
           - "Sprint timeline defined"
+          - "IF MCP available: All Sub-tasks created in JIRA"
+          - "IF MCP available: Stories transitioned to 'Ready for Development'"
           - "Client approval received"
 
         next_phase: "execution"
@@ -235,9 +414,60 @@ phases:
         approval_required: false
         client_action: "Review completed work and provide feedback"
 
+        pm_responsibilities:
+          - "Collect completion status from all agents"
+          - "Update JIRA items based on task completion"
+          - "Coordinate sprint retrospective"
+          - "Plan next sprint based on remaining work"
+
+        jira_integration:
+          - "IF Atlassian MCP available:"
+          - "  • PM reviews all Sub-tasks assigned in this sprint"
+          - "  • For completed Sub-tasks:"
+          - "    - PM transitions to 'Done' using learned workflow"
+          - "  • For in-progress Sub-tasks:"
+          - "    - PM transitions to appropriate status"
+          - "    - PM adds comment with progress notes"
+          - "  • When all Sub-tasks for a Story are Done:"
+          - "    - PM transitions parent Story to 'Done'"
+          - "  • When all Stories for an Epic are Done:"
+          - "    - PM transitions parent Epic to 'Done'"
+          - "  • PM updates parent FEATURE with sprint completion comment"
+          - "IF MCP NOT available:"
+          - "  • PM queues all transitions in jira-workflow.md offline_queue"
+
+        memory_updates:
+          semantic:
+            - "MANDATORY: Update .AutoSDLC/memory/semantic/knowledge-base.md with:"
+            - "  • Sprint completion status"
+            - "  • Completed vs remaining work"
+            - "  • Major accomplishments and blockers"
+            - "MANDATORY: Update .AutoSDLC/memory/semantic/jira-workflow.md with:"
+            - "  • All JIRA transitions performed"
+            - "  • Current status of all epics/stories/subtasks"
+          episodic:
+            - "MANDATORY: Update .AutoSDLC/memory/episodic/pm.md with:"
+            - "  • Sprint review outcomes"
+            - "  • Client feedback received"
+            - "  • Next sprint planning decisions"
+            - "  • JIRA status updates performed"
+            - "ALL AGENTS: Update respective episodic memories with:"
+            - "  • Tasks completed this sprint"
+            - "  • Challenges encountered and solutions"
+            - "  • Learnings for next sprint"
+          procedural:
+            - "Update .AutoSDLC/memory/procedural/user-preferences.yaml if:"
+            - "  • Client expressed new preferences during review"
+            - "  • Feedback patterns suggest process adjustments"
+          checkpoint:
+            - "EXECUTE MEMORY CHECKPOINT after sprint review"
+            - "Mark as: Checkpoint #{N} - Sprint {X} Complete"
+
         success_criteria:
           - "Sprint goals achieved or variance explained"
           - "Completed work demonstrated"
+          - "IF MCP available: All completed JIRA items transitioned to Done"
+          - "IF MCP available: All in-progress items have updated status"
           - "Next sprint planned"
 
         next_gate: "gate_5"  # Repeats

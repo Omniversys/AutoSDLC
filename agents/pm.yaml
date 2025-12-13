@@ -112,3 +112,102 @@ status_tracking:
   documents:
     - "status/current-status.yaml"
     - "status/sprint-plan.md"
+
+# JIRA Workflow Coordination
+
+jira_coordination:
+  role: "JIRA Workflow Manager"
+  
+  responsibilities:
+    - "Learn JIRA workflow in Gate 1 via test item creation"
+    - "Coordinate all JIRA updates across all gates"
+    - "Maintain offline queue when MCP unavailable"
+    - "Execute queued updates when MCP becomes available"
+    - "Re-learn workflow if new transitions discovered"
+  
+  gate_coordination:
+    gate_1:
+      - "Ask user for JIRA project key/URL"
+      - "Learn JIRA workflow via test items (Epic, Story, Sub-task, Bug, Task)"
+      - "Document workflow to .AutoSDLC/memory/semantic/jira-workflow.md"
+      - "Transition parent FEATURE to 'In Progress' after PSA approval"
+    
+    gate_2:
+      - "Create epics in JIRA (from PO's markdown docs)"
+      - "Create stories in JIRA (from PO's markdown docs)"
+      - "Set Story Points custom field"
+      - "Link stories to epics and parent FEATURE"
+      - "Set initial status to 'To Do' or 'Backlog'"
+    
+    gate_3:
+      - "Add comment to parent FEATURE: 'Gate 3 Complete: Architecture Approved'"
+      - "Optionally add 'architecture-approved' label to stories"
+    
+    gate_4:
+      - "Create subtasks in JIRA from sprint plan"
+      - "Link subtasks to parent stories"
+      - "Assign subtasks to agents (if Jira users available)"
+      - "Add sprint information if sprint field available"
+      - "Add comment to parent FEATURE: 'Gate 4 Complete: Ready for Execution'"
+    
+    gate_5:
+      - "For completed stories: Transition all subtasks → Done, Story → Done"
+      - "For in-progress stories: Update subtask statuses, Story → In Progress"
+      - "For blocked stories: Set status to Blocked (if available)"
+      - "Update epic status: All stories done → Epic Done"
+      - "Add sprint summary comment to parent FEATURE"
+  
+  workflow_discovery:
+    process:
+      - "Use mcp_atlassian_atl_getVisibleJiraProjects to verify access"
+      - "Create test Epic: 'AutoSDLC Test Epic - Safe to Delete'"
+      - "Create test Story: 'AutoSDLC Test Story - Safe to Delete'"
+      - "Create test Sub-task: 'AutoSDLC Test Subtask - Safe to Delete'"
+      - "Create test Bug: 'AutoSDLC Test Bug - Safe to Delete'"
+      - "Create test Task: 'AutoSDLC Test Task - Safe to Delete'"
+      - "For each test item: Use mcp_atlassian_atl_getTransitionsForJiraIssue"
+      - "Document: statuses, transitions, transition IDs, custom fields"
+      - "Ask user: 'Delete test items or keep marked as test?'"
+      - "Save to .AutoSDLC/memory/semantic/jira-workflow.md"
+    
+    required_tools:
+      - "mcp_atlassian_atl_createJiraIssue"
+      - "mcp_atlassian_atl_getVisibleJiraProjects"
+      - "mcp_atlassian_atl_editJiraIssue"
+      - "mcp_atlassian_atl_transitionJiraIssue"
+      - "mcp_atlassian_atl_getTransitionsForJiraIssue"
+  
+  offline_mode:
+    detection:
+      - "If mcp_atlassian tools not available"
+      - "If mcp_atlassian calls fail repeatedly"
+    
+    queuing:
+      - "Append updates to .AutoSDLC/memory/semantic/jira-workflow.md offline queue"
+      - "Format: YAML with issue_key, action, from_status, to_status, timestamp, gate"
+      - "Inform user: 'JIRA offline - update queued'"
+    
+    flush_queue:
+      - "When MCP becomes available, PM executes queue in order"
+      - "Clear queue after successful execution"
+      - "Report: '{N} queued JIRA updates executed'"
+  
+  workflow_relearning:
+    trigger:
+      - "If transition fails with 'transition not found' error"
+      - "If user says: 'refresh JIRA workflow' or 'relearn JIRA workflow'"
+      - "If new issue type encountered"
+    
+    process:
+      - "Create new test item of the problematic type"
+      - "Re-query available transitions using mcp_atlassian_atl_getTransitionsForJiraIssue"
+      - "Update .AutoSDLC/memory/semantic/jira-workflow.md"
+      - "Retry failed transition with new mapping"
+      - "Log re-learning in jira-workflow.md history section"
+  
+  multi_project_support:
+    - "Ask user if project spans multiple JIRA projects"
+    - "Learn workflow for each project separately"
+    - "Document which components belong to which project"
+    - "Route JIRA operations to correct project"
+

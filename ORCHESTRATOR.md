@@ -56,6 +56,121 @@ See `.AutoSDLC/memory/procedural/memory-manager.yaml` for complete memory system
 
 ---
 
+## 🧠 Memory Checkpoint Protocol
+
+**CRITICAL**: Context window limits can cause degraded performance. Aggressive memory offloading is MANDATORY.
+
+### When to Execute Checkpoints
+
+Checkpoints are **MANDATORY** at these triggers:
+
+1. **Gate Completion**: After every gate approval (Gates 1-5)
+2. **Message Interval**: Every 15 messages in a session
+3. **Token Threshold**: When token usage reaches 25% of limit
+4. **Before Major Decision**: Architecture choices, epic approvals, scope changes
+
+**Token Usage Detection**:
+- Auto-detect if possible (recommended)
+- Fallback: Assume 25% threshold = ~15 messages or gate completion
+- Warning levels: 25% (checkpoint), 50% (urgent), 75% (critical)
+
+### 7-Step Checkpoint Procedure
+
+**Execute this EXACT sequence at every checkpoint:**
+
+```yaml
+Step 1: Summarize Active Context
+  - Review last 20 messages for key decisions
+  - Identify: decisions made, client feedback, blockers encountered
+  - Format: Concise bullet points (max 10 lines)
+
+Step 2: Extract Semantic Facts
+  - What new facts were learned? (architecture, scope, constraints)
+  - What decisions were locked? (tech stack, epic structure)
+  - What assumptions were validated/invalidated?
+  - WRITE to: .AutoSDLC/memory/semantic/knowledge-base.md
+  - APPEND to existing content, do NOT overwrite
+
+Step 3: Extract Episodic History
+  - What actions did I take? (files created, JIRA items updated)
+  - What feedback did client provide?
+  - What problems did I encounter and solve?
+  - WRITE to: .AutoSDLC/memory/episodic/{agent-name}.md
+  - APPEND to existing content, do NOT overwrite
+
+Step 4: Extract Procedural Patterns
+  - Did client express new preferences?
+  - Did I learn a new workflow or process?
+  - Are there patterns to remember for future?
+  - IF YES: UPDATE .AutoSDLC/memory/procedural/user-preferences.yaml
+
+Step 5: Update State Files
+  - UPDATE .AutoSDLC/copilot-state.md with current gate/phase
+  - UPDATE .AutoSDLC/action-plan.md with next steps
+  - IF JIRA active: UPDATE .AutoSDLC/memory/semantic/jira-workflow.md
+
+Step 6: Truncate Active Context
+  - Keep ONLY last 5 messages in active context
+  - Older messages are now in memory files
+  - This is CRITICAL for token budget management
+
+Step 7: Verify Checkpoint
+  - Confirm all memory files were updated
+  - Confirm state files reflect current position
+  - IF any step failed: WARN user immediately
+  - Log: "Checkpoint #{N} complete - {Gate/Milestone}"
+```
+
+**Checkpoint Counter**: Track checkpoints in `.AutoSDLC/copilot-state.md`:
+```markdown
+## Checkpoint Log
+- Checkpoint #1: Gate 1 PSA Complete (2024-01-15)
+- Checkpoint #2: Message interval (15 messages) (2024-01-15)
+- Checkpoint #3: Gate 2 Stories Complete (2024-01-16)
+```
+
+### Memory Compression
+
+**Weekly Compression** (every 7 days of active work):
+- Compress episodic memory older than 7 days
+- Format: Single summary paragraph per day
+- Keep: Key decisions, client feedback, major blockers
+- Archive original to: `.AutoSDLC/memory/archive/episodic-{date}.md`
+
+**Monthly Compression** (every 30 days):
+- Compress weekly summaries into monthly overview
+- Archive to: `.AutoSDLC/memory/archive/monthly-{YYYY-MM}.md`
+- Keep in active memory: Only current month + last month
+
+**Compression Process**:
+1. Read episodic memory file
+2. Identify entries older than threshold (7 or 30 days)
+3. Summarize old entries (preserve critical facts only)
+4. Write original to archive folder
+5. Replace old entries with compressed summary
+6. Verify archive was created successfully
+
+### Failure Warnings
+
+**IF checkpoint is skipped or fails:**
+```
+⚠️ CRITICAL: Memory checkpoint #{N} failed
+- Risk: Context overflow imminent
+- Impact: May lose conversation history, repeat questions
+- Action Required: Manual checkpoint needed
+- Next checkpoint: {trigger}
+```
+
+**IF token usage exceeds 75% without checkpoint:**
+```
+🚨 URGENT: Token budget at 75% without recent checkpoint
+- Last checkpoint: #{N} at {timestamp}
+- Messages since: {count}
+- IMMEDIATE ACTION: Execute checkpoint now
+```
+
+---
+
 ## 📹 Session Recording (Optional - Educational)
 
 AutoSDLC can record sessions for educational purposes and knowledge sharing.

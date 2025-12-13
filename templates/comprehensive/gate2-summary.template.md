@@ -3,13 +3,13 @@
 **Project:** {project_name}  
 **Date:** {date}  
 **Status:** {status}  
-**EWO/Parent Issue:** [{parent_issue_key}: {parent_issue_title}]({parent_issue_url})
+**FEATURE/Parent Issue:** [{parent_issue_key}: {parent_issue_title}]({parent_issue_url})
 
 ---
 
 ## Overview
 
-This document provides a complete mapping of all epics and user stories created for the {project_name} project. All stories are tracked in Jira under the {jira_project_key} project and linked to their parent epics and the master EWO.
+This document provides a complete mapping of all epics and user stories created for the {project_name} project. All stories are tracked in Jira under the {jira_project_key} project and linked to their parent epics and the master FEATURE.
 
 **Total Scope:**
 - **{phase_1_name}:** {phase_1_story_count} stories, {phase_1_story_points} story points
@@ -21,7 +21,7 @@ This document provides a complete mapping of all epics and user stories created 
 ## Epic Hierarchy
 
 ```
-{parent_issue_key} (EWO: {parent_issue_title})
+{parent_issue_key} (FEATURE: {parent_issue_title})
 ├── {epic_1_key} (Epic 1: {epic_1_title}) - {epic_1_points} points
 ├── {epic_2_key} (Epic 2: {epic_2_title}) - {epic_2_points} points
 └── {epic_3_key} (Epic 3: {epic_3_title}) - {epic_3_points} points
